@@ -1,0 +1,164 @@
+%
+% File lfd1617.tex
+%
+%% Based on the style files for EACL-2017
+%% Based on the style files for ACL-2016
+%% Based on the style files for ACL-2015, with some improvements
+%%  taken from the NAACL-2016 style
+%% Based on the style files for ACL-2014, which were, in turn,
+%% Based on the style files for ACL-2013, which were, in turn,
+%% Based on the style files for ACL-2012, which were, in turn,
+%% based on the style files for ACL-2011, which were, in turn, 
+%% based on the style files for ACL-2010, which were, in turn, 
+%% based on the style files for ACL-IJCNLP-2009, which were, in turn,
+%% based on the style files for EACL-2009 and IJCNLP-2008...
+
+%% Based on the style files for EACL 2006 by 
+%%e.agirre@ehu.es or Sergi.Balari@uab.es
+%% and that of ACL 08 by Joakim Nivre and Noah Smith
+
+\documentclass[11pt]{article}
+\usepackage{eacl2017}
+\usepackage{times}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[colorlinks]{hyperref}
+
+\usepackage{pdflscape}
+\hypersetup{
+    colorlinks,
+    linkcolor={red},
+    linktoc=page,
+    citecolor={blue},
+    urlcolor={blue}
+}
+
+\usepackage{caption}
+\captionsetup[table]{font={stretch=1.2}}
+\captionsetup[figure]{font={stretch=1.2}}
+
+
+
+%%%% LEAVE THIS IN
+\eaclfinalcopy
+
+
+\newcommand\BibTeX{B{\sc ib}\TeX}
+  
+\title{DSH-Add Your Own Title}
+%Add the authors name alphabetically!
+\author{first name
+\textsuperscript{1}, second name\textsuperscript{2, 3}, third name\textsuperscript{4},\\
+%\vspace{0pt}
+\\
+\textsuperscript{1}Your student number,  \textsuperscript{2} Your student number \textsuperscript{3} your student number \\
+\texttt{\{first name, second name, \& third name\}@student.uni.lu} \\ %in case your adding Lu email address use this template and if you want to add different email address from your coauthor use the following template. 
+\texttt{nnn.xzx23@yahoo.com}\\
+\texttt{xxx.yyy@yahoo.com}}
+\date{}  
+
+\pagenumbering{roman}
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+This is the template for your final report. 
+
+
+\end{abstract}
+
+
+\section{Introduction}
+
+We use the modules in scikit-learn to split data into training and testing sets. And we train the data and estimate how well it is likely to perform on out-of-sample data through evaluation functions such as precision, recall, f-score, and also with confusion matrix. And the distinct values of prior and posterior probabilities also shows how important is the additional information taken into account. 
+
+\section{Data}
+
+In this section, you need to describe your dataset in details. 
+
+\section {Exploratory Data Analysis (EDA)}
+In this section, you need to investigate data trend, to explore the data and visualize it. The most important part of understanding the data is identifying the questions that you want to answer and then the second important part is to summarize their main characteristics, often plotting them visually. The plotting in EDA consists of Histograms, Box plot, Scatter plot, and many more. 
+
+\section{Method/Approach/Model}
+
+For this section, we need to have a clear overview of your method so try to be precise and explain it in a short form that someone else can understand it easily. 
+If you want to use any math for this section, there is a software that if you give it a picture of your math, you will get the latex code for that math :). The name of the software is \textbf{Mathpix snip}.
+
+\section{Results \& Discussion}
+
+This is an important section in your report. Try to spend more time on this section. 
+
+\begin{table}[!h]
+\centering
+\caption{The caption needs to be short and informative,\label{tab:sample}}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+             & precision & recall & f1-score & support \\ \hline
+least        & 0.85      & 0.69   &          &         \\ \hline
+left         & 0.68      & 0.79   &          &         \\ \hline
+left-center  & 0.65      & 0.78   &          &         \\ \hline
+right        & 0.99      & 0.85   &          &         \\ \hline
+right-center & 0.44      & 0.07   &          &         \\ \hline
+avg / total  & 0.79      & 0.77   &          &         \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+You can split \verb!Results! and \verb!Discussion! sections. Use the possibility of adding table \ref{tab:sample} and figure \ref{fig:boxplot} to make your report to be easier to follow for readers! 
+You can use following websites to make your latex table:
+\begin{itemize}
+    \item {\href{https://www.latex-tables.com/}{The first suggestion}}
+    \item {\href{https://www.tablesgenerator.com/}{The second suggestion}}
+\end{itemize}
+Figure \ref{fig:boxplot} is a sample of a figure which you can use in your report. 
+\begin{figure}[!hbtp]
+  \centering
+  \includegraphics[width = 1\linewidth, height = 0.5\linewidth]{boxplot_age_ADS.png}
+  \caption{\scriptsize Box plot of participants age.\label{fig:boxplot}}
+\end{figure}
+
+
+
+\section{Conclusion}
+
+Summary your findings in one or two paragraphs. If you have any reference to support your work, you can also add them to your report \cite{gerven1997comparative}. 
+This is a template for your report, please submit the pdf file for your report at the end. 
+The name of pdf file should be:
+
+
+\section{Table of collaborations}
+In this section, we want you briefly describe what each one did in your group for the assigned project (Table \ref{tab:collab}).
+\begin{table}[!h]
+\centering
+\caption{The caption needs to be short and informative},\label{tab:collab}
+\begin{tabular}{|l|l|l|}
+\hline
+                & \multicolumn{2}{l|}{\textbf{Task}} \\ \hline
+\textbf{Name 1} & \multicolumn{2}{l|}{}              \\ \hline
+\textbf{Name 2} & \multicolumn{2}{l|}{}              \\ \hline
+\textbf{Name 3} & \multicolumn{2}{l|}{}              \\ \hline
+\end{tabular}
+\end{table}
+
+
+\section{Pdf}
+Please save your file as a pdf file and apply the following template for naming your pdf file.
+\textit{DSH\_nameofyourproject\_phasenumber}
+
+\noindent Good luck :)
+
+
+
+
+\bibliographystyle{apalike}
+\raggedright
+{\scriptsize
+\bibliography{ref.bib}}
+
+
+\end{document}
