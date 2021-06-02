@@ -77,7 +77,9 @@
 
 % Problem statement
 
-We use the modules in scikit-learn to split data into training and testing sets. And we train the data and estimate how well it is likely to perform on out-of-sample data through evaluation functions such as precision, recall, f-score, and also with confusion matrix. And the distinct values of prior and posterior probabilities also shows how important is the additional information taken into account. 
+In this study, we are working with a dataset of reviews. Our goal is to classifiy the review samples according to their sentiment, which can be \textit{negative} or \textit{positive}. Additionally, we classifiy these samples to the topic of the reviews: \textit{books}, \textit{camera}, \textit{dvd}, \textit{health}, \textit{music} or \textit{software}.
+
+% We use the modules in scikit-learn to split data into training and testing sets. And we train the data and estimate how well it is likely to perform on out-of-sample data through evaluation functions such as precision, recall, f-score, and also with confusion matrix. And the distinct values of prior and posterior probabilities also shows how important is the additional information taken into account. 
 
 \section{Data}
 
@@ -171,14 +173,20 @@ Figure \ref{fig:boxplot} is a sample of a figure which you can use in your repor
 
 \section{Conclusion}
 
-Summary your findings in one or two paragraphs. If you have any reference to support your work, you can also add them to your report \cite{gerven1997comparative}. 
-This is a template for your report, please submit the pdf file for your report at the end. 
-The name of pdf file should be:
+% Summary your findings in one or two paragraphs. If you have any reference to support your work, you can also add them to your report \cite{gerven1997comparative}. 
+% This is a template for your report, please submit the pdf file for your report at the end. 
+% The name of pdf file should be:
+
+We presented our work on sentiment analysis for the \textit{text} project from phase 2 of the DSH course. During this project, we try to classifiy product reviews to a sentiment or a review topic. We achieved for sentiment and topic classification test accuracies of 0.833\% and 0.929\% respectively.
+
+These test accuracies were obtained by the stacking classifiers. We discussed which type of classifiers should be selected and concluded that it depends on the setting in which it will be used.
 
 \section{Table of collaborations}
-In this section, we want you briefly describe what each one did in your group for the assigned project (Table \ref{tab:collab}).
 
-% \appendix
+You will find the task descriptions executed by each group member in Table \ref{tab:collab} in the Appendix.
+
+% In this section, we want you briefly describe what each one did in your group for the assigned project (Table \ref{tab:collab}).
+
 \onecolumn
 \newpage
 \clearpage
@@ -206,6 +214,8 @@ In this section, we want you briefly describe what each one did in your group fo
                   & Topic Grid search benchmark \\\cline{2-2}
                   & Final benchmark assessment \\\cline{2-2}
                   & Best model selection \\\cline{2-2}
+                  & Formulate abstract, introduction, discussion and conclusion sections \\\cline{2-2}
+                  & Format the report template \\\cline{2-2}
 
 \hline
 
