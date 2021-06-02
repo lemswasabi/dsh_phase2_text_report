@@ -23,6 +23,8 @@
 \usepackage{url}
 \usepackage{latexsym}
 \usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{array}
 \usepackage[utf8]{inputenc}
 \usepackage[colorlinks]{hyperref}
 
@@ -184,13 +186,47 @@ In this section, we want you briefly describe what each one did in your group fo
 
 \begin{table}[!h]
 \centering
-\caption{The caption needs to be short and informative}\label{tab:collab}
-\begin{tabular}{|l|l|l|}
+\caption{Task descriptions executed by each student of the group.}\label{tab:collab}
+\begin{tabular}{|c| >{\centering\arraybackslash}m{0.6\textwidth}|}\hline
+
+\textbf{Student}  & \textbf{Task} \\
+
 \hline
-                & \multicolumn{2}{l|}{\textbf{Task}} \\ \hline
-\textbf{Leminh Nguyen} & \multicolumn{2}{l|}{}              \\ \hline
-\textbf{Name 2} & \multicolumn{2}{l|}{}              \\ \hline
-\textbf{Name 3} & \multicolumn{2}{l|}{}              \\ \hline
+
+\multirow{1}{*}{\textbf{Leminh Nguyen}}
+
+                  & Helping out with implementing the data visualization \\\cline{2-2}
+                  & Implementation of dataset conversion to Pandas DataFrame representation \\\cline{2-2}
+                  & Implementation of data pre-processing (Data cleaning, selection, normalization) \\\cline{2-2}
+                  & Define performance measure + cross validation \\\cline{2-2}
+                  & Definition of Grid Search and implementation of grid search framework to iterate over a set of classifer-hyperparameters candidate \\\cline{2-2}
+                  & Performance evaluation with punctuation \\\cline{2-2}
+                  & Performance evaluation without punctuation \\\cline{2-2}
+                  & Sentiment Grid search benchmark \\\cline{2-2}
+                  & Topic Grid search benchmark \\\cline{2-2}
+                  & Final benchmark assessment \\\cline{2-2}
+                  & Best model selection \\\cline{2-2}
+
+\hline
+
+\multirow{1}{*}{\textbf{Alex Poldrugo}}
+
+                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
+                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
+                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
+                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
+
+\hline
+
+\multirow{1}{*}{\textbf{Rafidison Rakotondrasoa}}
+
+                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
+                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
+                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
+                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
+
+\hline
+
 \end{tabular}
 \end{table}
 
