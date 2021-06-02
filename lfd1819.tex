@@ -47,45 +47,90 @@
 
 \newcommand\BibTeX{B{\sc ib}\TeX}
   
-\title{DSH-Add Your Own Title}
+\title{DSH - Sentiment Analysis}
 %Add the authors name alphabetically!
-\author{first name
-\textsuperscript{1}, second name\textsuperscript{2, 3}, third name\textsuperscript{4},\\
+\author{Leminh Nguyen
+\textsuperscript{1}, Alex Poldrugo\textsuperscript{2}, Rafidison Santatra Rakotondrasoa\textsuperscript{3},\\
 %\vspace{0pt}
 \\
-\textsuperscript{1}Your student number,  \textsuperscript{2} Your student number \textsuperscript{3} your student number \\
-\texttt{\{first name, second name, \& third name\}@student.uni.lu} \\ %in case your adding Lu email address use this template and if you want to add different email address from your coauthor use the following template. 
-\texttt{nnn.xzx23@yahoo.com}\\
-\texttt{xxx.yyy@yahoo.com}}
-\date{}  
+\textsuperscript{1}0180531722,  \textsuperscript{2} Your student number \textsuperscript{3} your student number \\
+\texttt{\{le.nguyen.001, second name, \& third name\}@student.uni.lu} \\ %in case your adding Lu email address use this template and if you want to add different email address from your coauthor use the following template. 
+% \texttt{nnn.xzx23@yahoo.com}\\
+% \texttt{xxx.yyy@yahoo.com}
+}
+\date{\date}  
 
 \pagenumbering{roman}
 
-
 \begin{document}
+
 \maketitle
+
 \begin{abstract}
-This is the template for your final report. 
-
-
+  \textbf{During this project, we classify product reviews according to sentiments and the topic of the reviews. We achieved for sentiment and topic classification testing accuracies of 0.833\% and 0.929\% respectively.}
 \end{abstract}
 
 
 \section{Introduction}
 
+% Problem statement
+
 We use the modules in scikit-learn to split data into training and testing sets. And we train the data and estimate how well it is likely to perform on out-of-sample data through evaluation functions such as precision, recall, f-score, and also with confusion matrix. And the distinct values of prior and posterior probabilities also shows how important is the additional information taken into account. 
 
 \section{Data}
 
+% \textcolor{red}{Alex}
+
 In this section, you need to describe your dataset in details. 
 
-\section {Exploratory Data Analysis (EDA)}
-In this section, you need to investigate data trend, to explore the data and visualize it. The most important part of understanding the data is identifying the questions that you want to answer and then the second important part is to summarize their main characteristics, often plotting them visually. The plotting in EDA consists of Histograms, Box plot, Scatter plot, and many more. 
+\section{Exploratory Data Analysis (EDA)}
+
+In this section, we investigate data trend, to explore the data and visualize it.
+
+\subsection{Loading of data}
+
+\textcolor{red}{Leminh}
+
+\subsection{Visualization of data}
+
+\textcolor{red}{Alex}
+
+% In this section, you need to investigate data trend, to explore the data and visualize it. The most important part of understanding the data is identifying the questions that you want to answer and then the second important part is to summarize their main characteristics, often plotting them visually. The plotting in EDA consists of Histograms, Box plot, Scatter plot, and many more. 
 
 \section{Method/Approach/Model}
 
-For this section, we need to have a clear overview of your method so try to be precise and explain it in a short form that someone else can understand it easily. 
-If you want to use any math for this section, there is a software that if you give it a picture of your math, you will get the latex code for that math :). The name of the software is \textbf{Mathpix snip}.
+\subsection{Data pre-processing}
+
+\textcolor{red}{Leminh}
+
+\subsection{Text Representation}
+
+\textcolor{red}{Santatra}
+
+\subsection{Feature Selection}
+
+\textcolor{red}{Santatra}
+
+\subsection{Implementation}
+
+\textcolor{red}{Leminh}
+
+\subsection{Performance Measures}
+
+\textcolor{red}{Leminh}
+
+\subsection{Baseline: Training of a Naive Bayes model}
+
+\subsection{Baseline: Topic classifiction}
+
+\textcolor{red}{Alex}
+
+\subsection{Baseline: Sentiment classifiction}
+
+\textcolor{red}{Santatra}
+
+% For this section, we need to have a clear overview of your method so try to be precise and explain it in a short form that someone else can understand it easily. 
+% If you want to use any math for this section, there is a software that if you give it a picture of your math, you will get the latex code for that math :). The name of the software is \textbf{Mathpix snip}.
 
 \section{Results \& Discussion}
 
@@ -122,43 +167,42 @@ Figure \ref{fig:boxplot} is a sample of a figure which you can use in your repor
   \caption{\scriptsize Box plot of participants age.\label{fig:boxplot}}
 \end{figure}
 
-
-
 \section{Conclusion}
 
 Summary your findings in one or two paragraphs. If you have any reference to support your work, you can also add them to your report \cite{gerven1997comparative}. 
 This is a template for your report, please submit the pdf file for your report at the end. 
 The name of pdf file should be:
 
-
 \section{Table of collaborations}
 In this section, we want you briefly describe what each one did in your group for the assigned project (Table \ref{tab:collab}).
+
+% \appendix
+\onecolumn
+\newpage
+\clearpage
+\section{Appendix}
+
 \begin{table}[!h]
 \centering
-\caption{The caption needs to be short and informative},\label{tab:collab}
+\caption{The caption needs to be short and informative}\label{tab:collab}
 \begin{tabular}{|l|l|l|}
 \hline
                 & \multicolumn{2}{l|}{\textbf{Task}} \\ \hline
-\textbf{Name 1} & \multicolumn{2}{l|}{}              \\ \hline
+\textbf{Leminh Nguyen} & \multicolumn{2}{l|}{}              \\ \hline
 \textbf{Name 2} & \multicolumn{2}{l|}{}              \\ \hline
 \textbf{Name 3} & \multicolumn{2}{l|}{}              \\ \hline
 \end{tabular}
 \end{table}
 
+% \section{Pdf}
+% Please save your file as a pdf file and apply the following template for naming your pdf file.
+% \textit{DSH\_nameofyourproject\_phasenumber}
 
-\section{Pdf}
-Please save your file as a pdf file and apply the following template for naming your pdf file.
-\textit{DSH\_nameofyourproject\_phasenumber}
-
-\noindent Good luck :)
-
-
-
+% \noindent Good luck :)
 
 \bibliographystyle{apalike}
 \raggedright
 {\scriptsize
 \bibliography{ref.bib}}
-
 
 \end{document}
