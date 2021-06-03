@@ -269,30 +269,111 @@ We compile every preprocessing and feature engineering steps into a function cal
 
 \subsection{Baseline: Training of a Naive Bayes model}
 
-\subsection{Performance evaluation with punctuation}
+% For this section, we need to have a clear overview of your method so try to be precise and explain it in a short form that someone else can understand it easily. 
+% If you want to use any math for this section, there is a software that if you give it a picture of your math, you will get the latex code for that math :). The name of the software is \textbf{Mathpix snip}.
+
+\subsubsection{Performance evaluation with punctuation}
 
 \textcolor{red}{Leminh}
 
-\subsection{Baseline: Topic classifiction}
+\subsubsection{Baseline: Topic classifiction}
 
 \textcolor{red}{Alex}
 
-\subsection{Baseline: Sentiment classifiction}
+\subsubsection{Baseline: Sentiment classifiction}
 
 \textcolor{red}{Santatra}
 
 \subsection{Grid Search}
 
-\subsection{Grid Search: Base classifiers}
+Grid search is an approach to find the optimal hyperparameters of a model which yields the most accurate predictions. Hyperparameter is a characteristics of an estimator which cannot be learned from data. These hyperparameters have to be set before training. During grid search we try to find the best hyperparameters values through an exhaustive search over specified parameter values for an estimator.
 
-\textcolor{red}{Leminh}
+For this study, we implemented a grid search framework which iterates over possible estimator candidates and executes grid search for each classifer while considering the defined hyperparameter search space.
 
-\subsection{Grid Search: Ensemble methods}
+\subsubsection{Grid Search: Base classifiers}
+
+We executed grid search for both sentiment and topic classification tasks. The best hyperparameters for the sentiment and topic classification task can be consulted in Table \ref{tab:sentiment_gs} and in Table \ref{tab:topic_gs} respectively. The \textit{best\_score} in these tables represent the training accuracies.
+
+\begin{table}[!ht]
+\centering
+\caption{Best hyperparameters found during grid search for the sentiment classifiction task.}
+\label{tab:sentiment_gs}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|c|c|c|c|}
+\hline
+classifier & best\_params & best\_score & std\_test\_score \\ \hline
+SVC	& \{'C': 10, 'class\_weight': 'balanced', 'kernel': 'rbf', 'probability': True\}	& 0.824	& 0.022 \\ \hline
+MultinomialNB & \{'alpha': 10\}	& 0.807	& 0.031 \\ \hline
+RandomForestClassifier & \{'class\_weight': None, 'criterion': 'entropy', 'n\_estimators': 70\}	& 0.802	& 0.014 \\ \hline
+KNeighborsClassifier & \{'n\_neighbors': 85, 'p': 2\}	& 0.742	& 0.017 \\ \hline
+DecisionTreeClassifier & \{'class\_weight': 'balanced', 'criterion': 'entropy', 'splitter': 'best'\}	& 0.692	& 0.024 \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\caption{Best hyperparameters found during grid search for the topic classifiction task.}
+\label{tab:topic_gs}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|c|c|c|c|}
+\hline
+classifier & best\_params & best\_score & std\_test\_score \\ \hline
+SVC	& \{'C': 10, 'class\_weight': 'balanced', 'kernel': 'rbf', 'probability': True\}	& 0.919	& 0.003 \\ \hline
+MultinomialNB & \{'alpha': 1\}	& 0.917	& 0.011 \\ \hline
+KNeighborsClassifier & \{'n\_neighbors': 95, 'p': 2\}	& 0.890	& 0.008 \\ \hline
+RandomForestClassifier & \{'class\_weight': 'balanced\_subsample', 'criterion': 'gini', 'n\_estimators': 90\}	& 0.881	& 0.008 \\ \hline
+DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'gini', 'splitter': 'random'\}	& 0.800	& 0.023 \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
+\subsubsection{Grid Search: Ensemble methods}
 
 \textcolor{red}{Santatra}
 
-% For this section, we need to have a clear overview of your method so try to be precise and explain it in a short form that someone else can understand it easily. 
-% If you want to use any math for this section, there is a software that if you give it a picture of your math, you will get the latex code for that math :). The name of the software is \textbf{Mathpix snip}.
+\begin{table}[!ht]
+\centering
+\caption{Best hyperparameters found during grid search for the sentiment classifiction task.}
+\label{tab:sentiment_em_gs}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|c|c|c|c|}
+\hline
+classifier & best\_params & best\_score & std\_test\_score \\ \hline
+SVC	& \{'C': 10, 'class\_weight': 'balanced', 'kernel': 'rbf', 'probability': True\}	& 0.824	& 0.022 \\ \hline
+MultinomialNB & \{'alpha': 10\}	& 0.807	& 0.031 \\ \hline
+RandomForestClassifier & \{'class\_weight': 'None', 'criterion': 'entropy', 'n\_estimators': 70\}	& 0.802	& 0.014 \\ \hline
+KNeighborsClassifier & \{'n\_neighbors': 85, 'p': 2\}	& 0.742	& 0.017 \\ \hline
+DecisionTreeClassifier & \{'class\_weight': 'balanced', 'criterion': 'entropy', 'splitter': 'best'\}	& 0.692	& 0.024 \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\caption{Best hyperparameters found during grid search for the topic classifiction task.}
+\label{tab:topic_em_gs}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|c|c|c|c|}
+\hline
+classifier & best\_params & best\_score & std\_test\_score \\ \hline
+SVC	& \{'C': 10, 'class\_weight': 'balanced', 'kernel': 'rbf', 'probability': True\}	& 0.822	& 0.015 \\ \hline
+MultinomialNB & \{'alpha': 1\}	& 0.807	& 0.013 \\ \hline
+RandomForestClassifier & \{'class\_weight': 'balanced\_subsample', 'criterion': 'gini', 'n\_estimators': 70\}	& 0.800	& 0.005 \\ \hline
+KNeighborsClassifier & \{'n\_neighbors': 95, 'p': 2\}	& 0.743	& 0.01 \\ \hline
+DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'entropy', 'splitter': 'random'\}	& 0.687	& 0.005 \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
 % }}}
 
 % Results and discussion {{{
