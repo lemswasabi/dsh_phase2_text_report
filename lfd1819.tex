@@ -1,4 +1,4 @@
-%
+% packages {{{
 % File lfd1617.tex
 %
 %% Based on the style files for EACL-2017
@@ -41,14 +41,42 @@
 \captionsetup[table]{font={stretch=1.2}}
 \captionsetup[figure]{font={stretch=1.2}}
 
+\usepackage{listings}
+\usepackage{xcolor}
 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle, language=Python}
 
 %%%% LEAVE THIS IN
 \eaclfinalcopy
 
+\graphicspath{{./figures/}}
 
-\newcommand\BibTeX{B{\sc ib}\TeX}
+\newcommand\BibTeX{B{\sc ib}\TeX}% }}}
   
+% {{{ title
 \title{DSH - Sentiment Analysis}
 %Add the authors name alphabetically!
 \author{Leminh Nguyen
@@ -62,17 +90,19 @@
 }
 \date{\date}  
 
-\pagenumbering{roman}
+\pagenumbering{roman}% }}}
 
 \begin{document}
 
 \maketitle
 
+% abstract {{{
 \begin{abstract}
   \textbf{During this project, we classify product reviews according to sentiments and the topic of the reviews. We achieved for sentiment and topic classification testing accuracies of 0.833\% and 0.929\% respectively.}
 \end{abstract}
+% }}}
 
-
+% Introduction {{{
 \section{Introduction}
 
 % Problem statement
@@ -80,32 +110,139 @@
 In this study, we are working with a dataset of reviews. Our goal is to classifiy the review samples according to their sentiment, which can be \textit{negative} or \textit{positive}. Additionally, we classifiy these samples to the topic of the reviews: \textit{books}, \textit{camera}, \textit{dvd}, \textit{health}, \textit{music} or \textit{software}.
 
 % We use the modules in scikit-learn to split data into training and testing sets. And we train the data and estimate how well it is likely to perform on out-of-sample data through evaluation functions such as precision, recall, f-score, and also with confusion matrix. And the distinct values of prior and posterior probabilities also shows how important is the additional information taken into account. 
+% }}}
 
+% Data {{{
 \section{Data}
 
-% \textcolor{red}{Alex}
+\textcolor{red}{Alex}
 
 In this section, you need to describe your dataset in details. 
+% }}}
 
+% EDA {{{
 \section{Exploratory Data Analysis (EDA)}
 
 In this section, we investigate data trend, to explore the data and visualize it.
 
 \subsection{Loading of data}
 
-\textcolor{red}{Leminh}
+Before we can explore the dataset and visualize it, we first need to transform the dataset in to a representation that we can work with. The given dataset is stored it a \textit{.txt} file. In Fig. \ref{fig:dataset_txt}, we visualized the structure of the .txt file. Each row of this file contains a review sample which is delimited by a newline character.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{dataset_txt.png}
+    \caption{Preview of the .txt file containing the review samples.}
+    \label{fig:dataset_txt}
+\end{figure}
+
+Each sample is divided into sections. The first word represents the topic of the review, whereas the second word depicts its sentiment. The third word of the sample serves as id. The rest of the row presents the review text itself. This is visualized in Fig. \ref{fig:review_sample}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{review_sample.png}
+    \caption{Layout of a review sample.}
+    \label{fig:review_sample}
+\end{figure}
+
+Each review text is already tokenized, therefore we only need to convert the dataset into a representation we can work with. We chose to transform the dataset into a Pandas DataFrame with the function defined in listing \ref{lst:load_data}.
+
+\begin{lstlisting}[label={lst:load_data}, caption=Transformation of the dataset.]
+def trainset_to_df(path):
+    """
+    trainset_to_df converts trainset.txt to a pandas dataframe
+    Args:
+        path: path string to trainset.txt
+    Return:
+        df: pandas dataframe of trainset.txt
+    """
+
+    with open(path, 'r') as f:
+        lines = f.readlines()
+
+    lines = [[line.split()[0], line.split()[1], line.split()[2], ' '.join(line.split()[3:])] for line in lines]
+    df = pd.DataFrame(lines, columns=['topic', 'sentiment', 'id', 'text'])
+
+    return df
+\end{lstlisting}
+
+The function in \ref{lst:load_data} removes any newline or trailing white characters and divides the sample into specific columns: labels, sentiment, id and text.
 
 \subsection{Visualization of data}
 
 \textcolor{red}{Alex}
 
 % In this section, you need to investigate data trend, to explore the data and visualize it. The most important part of understanding the data is identifying the questions that you want to answer and then the second important part is to summarize their main characteristics, often plotting them visually. The plotting in EDA consists of Histograms, Box plot, Scatter plot, and many more. 
+% }}}
 
+% Models and approach {{{
 \section{Method/Approach/Model}
 
 \subsection{Data pre-processing}
 
-\textcolor{red}{Leminh}
+We load our dataset with our \textit{trainset\_to\_df()} function defined in \ref{lst:load_data}:
+
+\begin{lstlisting}
+reviews = trainset_to_df('trainset.txt')
+\end{lstlisting}
+
+First of all, we check if there are any Nan or missing values inside the dataframe:
+
+\begin{lstlisting}
+reviews.isnull().values.any()
+\end{lstlisting}
+
+This returns us with \textit{False}, which means we don't have any missing values in the dataset.
+
+As a next step, we verify if any duplicate \textit{id} values exists:
+
+\begin{lstlisting}
+reviews['id'].duplicate().any()
+# True
+reviews['id'].duplicate().value_counts
+# True = 5000, False = 1000
+\end{lstlisting}
+
+This tells us that we have 5000 duplicate review ids. In order to verify if the duplicate id values and the text values are dependent we sort the dataframe according to the id value as seen if Fig. \ref{fig:id_sort}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{id_sort.png}
+    \caption{First samples of reviews sorted by \textit{id}.}
+    \label{fig:id_sort}
+\end{figure}
+
+There is no relation between the id and text columns, therefore we can remove the id column since it won't be useful as a feature:
+
+\begin{lstlisting}
+reviews = reviews[['topic', 'sentiment', 'text']]
+\end{lstlisting}
+
+When checking for duplicates in the text column:
+
+\begin{lstlisting}
+reviews[reviews['text'].duplicated()].sort_values('text')
+\end{lstlisting}
+
+We did not find any duplicates in this column.
+
+After dealing with missing and duplicate values, we continue with binarizing and label encode our variables. First we start to binarize our categorical varible in the sentiment column:
+
+\begin{lstlisting}
+reviews['sentiment'] = reviews['sentiment'].apply(lambda sentiment: 0 if sentiment == 'neg' else 1)
+\end{lstlisting}
+
+This operation applies the given lambda along the column where it maps \textit{'neg'} string to $0$ and \textit{'pos'} to $1$.
+
+Then we label encode the topic column with \textit{LabelEncoder()} from the \textit{sklearn.preprocessing} library:
+
+\begin{lstlisting}
+from sklearn import preprocessing
+
+le = preprocessing.LabelEncoder()
+review['topic'] = le.transform(reviews['topic'])
+
+\end{lstlisting}
 
 \subsection{Text Representation}
 
@@ -117,13 +254,24 @@ In this section, we investigate data trend, to explore the data and visualize it
 
 \subsection{Implementation}
 
-\textcolor{red}{Leminh}
+We compile every preprocessing and feature engineering steps into a function called preprocess\_dataset. This function executes every previously mentioned steps such as removing stopwords from the reviews, binarizing and encoding the respective labels. Additionally, it vectorizes the features with the TFID representation and uses the chi\_square\_test to select features.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{data_preprocessing_function.png}
+    \caption{Definition of \textit{preprocess\_dataset()} function.}
+    \label{fig:preprocess_dataset}
+\end{figure}
 
 \subsection{Performance Measures}
 
 \textcolor{red}{Leminh}
 
 \subsection{Baseline: Training of a Naive Bayes model}
+
+\subsection{Performance evaluation with punctuation}
+
+\textcolor{red}{Leminh}
 
 \subsection{Baseline: Topic classifiction}
 
@@ -133,16 +281,28 @@ In this section, we investigate data trend, to explore the data and visualize it
 
 \textcolor{red}{Santatra}
 
+\subsection{Grid Search}
+
+\subsection{Grid Search: Base classifiers}
+
+\textcolor{red}{Leminh}
+
+\subsection{Grid Search: Ensemble methods}
+
+\textcolor{red}{Santatra}
+
 % For this section, we need to have a clear overview of your method so try to be precise and explain it in a short form that someone else can understand it easily. 
 % If you want to use any math for this section, there is a software that if you give it a picture of your math, you will get the latex code for that math :). The name of the software is \textbf{Mathpix snip}.
+% }}}
 
+% Results and discussion {{{
 \section{Results \& Discussion}
 
 This is an important section in your report. Try to spend more time on this section. 
 
-\begin{table}[!h]
+\begin{table}[!ht]
 \centering
-\caption{The caption needs to be short and informative,\label{tab:sample}}
+\caption{The caption needs to be short and informative\label{tab:sample}}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{|l|l|l|l|l|}
@@ -170,7 +330,9 @@ Figure \ref{fig:boxplot} is a sample of a figure which you can use in your repor
   \includegraphics[width = 1\linewidth, height = 0.5\linewidth]{boxplot_age_ADS.png}
   \caption{\scriptsize Box plot of participants age.\label{fig:boxplot}}
 \end{figure}
+% }}}
 
+% Conclusion {{{
 \section{Conclusion}
 
 % Summary your findings in one or two paragraphs. If you have any reference to support your work, you can also add them to your report \cite{gerven1997comparative}. 
@@ -180,28 +342,34 @@ Figure \ref{fig:boxplot} is a sample of a figure which you can use in your repor
 We presented our work on sentiment analysis for the \textit{text} project from phase 2 of the DSH course. During this project, we try to classifiy product reviews to a sentiment or a review topic. We achieved for sentiment and topic classification test accuracies of 0.833\% and 0.929\% respectively.
 
 These test accuracies were obtained by the stacking classifiers. We discussed which type of classifiers should be selected and concluded that it depends on the setting in which it will be used.
+% }}}
 
+% Table of collaborations {{{
 \section{Table of collaborations}
 
 You will find the task descriptions executed by each group member in Table \ref{tab:collab} in the Appendix.
 
 % In this section, we want you briefly describe what each one did in your group for the assigned project (Table \ref{tab:collab}).
+% }}}
 
+% Appendix {{{
 \onecolumn
 \newpage
 \clearpage
 \section{Appendix}
+% }}}
 
+% Task descriptions {{{
 \begin{table}[!h]
 \centering
 \caption{Task descriptions executed by each student of the group.}\label{tab:collab}
 \begin{tabular}{|c| >{\centering\arraybackslash}m{0.6\textwidth}|}\hline
 
-\textbf{Student}  & \textbf{Task} \\
+\textbf{Group member}  & \textbf{Task} \\
 
 \hline
 
-\multirow{1}{*}{\textbf{Leminh Nguyen}}
+\multirow{2}{*}{\textbf{Leminh Nguyen}}
 
                   & Helping out with implementing the data visualization \\\cline{2-2}
                   & Implementation of dataset conversion to Pandas DataFrame representation \\\cline{2-2}
@@ -215,40 +383,44 @@ You will find the task descriptions executed by each group member in Table \ref{
                   & Final benchmark assessment \\\cline{2-2}
                   & Best model selection \\\cline{2-2}
                   & Formulate abstract, introduction, discussion and conclusion sections \\\cline{2-2}
-                  & Format the report template \\\cline{2-2}
+                  & Format the report template \\
 
 \hline
 
-\multirow{1}{*}{\textbf{Alex Poldrugo}}
+\multirow{2}{*}{\textbf{Alex Poldrugo}}
 
                   & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
                   & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
                   & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
-                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
+                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\
 
 \hline
 
-\multirow{1}{*}{\textbf{Rafidison Rakotondrasoa}}
+\multirow{2}{*}{\textbf{Rafidison Rakotondrasoa}}
 
                   & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
                   & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
                   & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
-                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
+                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\
 
 \hline
 
 \end{tabular}
 \end{table}
+% }}}
 
+% Comments {{{
 % \section{Pdf}
 % Please save your file as a pdf file and apply the following template for naming your pdf file.
 % \textit{DSH\_nameofyourproject\_phasenumber}
-
 % \noindent Good luck :)
+% }}}
 
+% Bibliography {{{
 \bibliographystyle{apalike}
 \raggedright
 {\scriptsize
 \bibliography{ref.bib}}
+% }}}
 
 \end{document}
