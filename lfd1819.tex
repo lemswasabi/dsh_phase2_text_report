@@ -203,7 +203,7 @@ reviews['id'].duplicate().value_counts
 # True = 5000, False = 1000
 \end{lstlisting}
 
-This tells us that we have 5000 duplicate review ids. In order to verify if the duplicate id values and the text values are dependent we sort the dataframe according to the id value as seen if Fig. \ref{fig:id_sort}.
+This tells us that we have 5000 duplicate review ids. In order to verify if the duplicate id values and the text values are dependent we sort the dataframe according to the id value as seen in Fig. \ref{fig:id_sort}.
 
 \begin{figure}[ht]
     \centering
@@ -265,22 +265,160 @@ We compile every preprocessing and feature engineering steps into a function cal
 
 \subsection{Performance Measures}
 
-\textcolor{red}{Leminh}
+\paragraph{Classification predictions.} In binary classification, an estimator can two types of predictions: \textit{True} or \textit{False}. True predictions can be either a true positive or a true negative where a model correctly predicts the positive or negative class respectively. The same works for the false positive and false negative predictions where the model makes incorrect predictions.
+
+\paragraph{Conclusion matrix.} An error matrix which visualizes the performance of an algorithm. Each row of the matrix represents the samples of an actual class, whereas the columns represent the samples in a predicted class. Fig. \ref{fig:confusion_matrix} visualizes an example of a confusion matrix.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{confusion_matrix.jpg}
+    \caption{An example of a confusion matrix.}
+    \label{fig:confusion_matrix}
+\end{figure}
+
+\paragraph{Accuracy.} A metrix to evaluation the classification of a model. It is defined by the ratio of correct predictions made by the model.
+
+\begin{equation}
+    Accuracy = \frac{Number \ of \ correct \ predictions}{Total \ number \ of \ predictions}
+\end{equation}
+
+\paragraph{Precision.} Represents the ratio of positive classifications which are actually correct amon the samples classified as positive.
+
+\begin{equation}
+    Precision = \frac{TP}{TP + FP}
+\end{equation}
+
+\paragraph{Recall.} Represents the ratio of actual positives which were identified correctly among the total number of positive examples.
+
+\begin{equation}
+    Recall = \frac{TP}{TP + FN}
+\end{equation}
+
+\paragraph{F-score.} This metric combines the precision and recall and is defined as a harmonic mean of these two measures.
+
+\begin{equation}
+    F_1 = \frac{TP}{TP + \frac{1}{2}(FP + FN)}
+\end{equation}
+
+\paragraph{Cross-validation.} Another metric to assess the performance of a classifier is the cross-validation approach. It assesses how a classifier generalizes on an independent data set. With this approach, we are able to detect overfitting of the model and mitigate biased slection of the training and testing subsets. This method has the following process:
+
+\begin{itemize}
+    \item Split the dataset into $k$ subsets
+    \item Rotate the training and validation subsets to create $k$ independent trained classifiers
+    \item Take the mean of the scores of these $k$ classifiers to assess the overall accuracy performance
+\end{itemize}
+
+A visualization of K-Fold, an example of cross-validation, is given is Fig. \ref{fig:cross_validation}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{cross_validation.png}
+    \caption{K-fold example where $k = 5$.}
+    \label{fig:cross_validation}
+\end{figure}
 
 \subsection{Baseline: Training of a Naive Bayes model}
 
 % For this section, we need to have a clear overview of your method so try to be precise and explain it in a short form that someone else can understand it easily. 
 % If you want to use any math for this section, there is a software that if you give it a picture of your math, you will get the latex code for that math :). The name of the software is \textbf{Mathpix snip}.
 
-\subsubsection{Performance evaluation with punctuation}
-
-\textcolor{red}{Leminh}
-
 \subsubsection{Baseline: Topic classifiction}
 
 \textcolor{red}{Alex}
 
 \subsubsection{Baseline: Sentiment classifiction}
+
+\textcolor{red}{Santatra}
+
+\subsubsection{Performance evaluation with punctuation}
+
+\paragraph{Sentiment classifiction.}
+
+In this section, we show case the test accuracies for the sentiment classifiction. In Fig. \ref{tab:sentiment_without_punctuation} we trained the models without including punctuations, whereas in Fig. \ref{tab:sentiment_with_punctuation} we included them during the training.
+
+\begin{table}[!ht]
+\centering
+\caption{Sentiment classifiction test accuracy scores without punctuation.}
+\label{tab:sentiment_without_punctuation}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{0.6\linewidth}{!}{%
+\begin{tabular}{|c|c|c|c|}
+\hline
+classifier & best\_score \\ \hline
+SVC	& 0.822 \\ \hline
+MultinomialNB & 0.807 \\ \hline
+RandomForestClassifier & 0.800 \\ \hline
+KNeighborsClassifier & 0.743 \\ \hline
+DecisionTreeClassifier & 0.687 \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\caption{Sentiment classifiction test accuracy scores with punctuation.}
+\label{tab:sentiment_with_punctuation}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{0.6\linewidth}{!}{%
+\begin{tabular}{|c|c|c|c|}
+\hline
+classifier & best\_score \\ \hline
+SVC	& 0.825 \\ \hline
+MultinomialNB & 0.813 \\ \hline
+RandomForestClassifier & 0.804 \\ \hline
+KNeighborsClassifier & 0.732 \\ \hline
+DecisionTreeClassifier & 0.663 \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
+\paragraph{Topic classifiction.}
+
+In this section, we show case the test accuracies for the topic classifiction. In Fig. \ref{tab:topic_without_punctuation} we trained the models without including punctuations, whereas in Fig. \ref{tab:topic_with_punctuation} we included them during the training.
+
+\begin{table}[ht]
+\centering
+\caption{Topic classifiction test accuracy scores without punctuation.}
+\label{tab:topic_without_punctuation}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{0.6\linewidth}{!}{%
+\begin{tabular}{|c|c|c|c|}
+\hline
+classifier & best\_score \\ \hline
+SVC	& 0.919 \\ \hline
+MultinomialNB & 0.916 \\ \hline
+KNeighborsClassifier & 0.896 \\ \hline
+RandomForestClassifier & 0.880 \\ \hline
+DecisionTreeClassifier & 0.798 \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Topic classifiction test accuracy scores with punctuation.}
+\label{tab:topic_with_punctuation}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{0.6\linewidth}{!}{%
+\begin{tabular}{|c|c|c|c|}
+\hline
+classifier & best\_score \\ \hline
+MultinomialNB & 0.923 \\ \hline
+SVC	& 0.919 \\ \hline
+KNeighborsClassifier & 0.889 \\ \hline
+RandomForestClassifier & 0.885 \\ \hline
+DecisionTreeClassifier & 0.797 \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
+During this analysis, we observed that the overall performance of the models improve when including the punctuation in the review text when training the models.
+
+\subsection{Ensemble methods}
 
 \textcolor{red}{Santatra}
 
@@ -381,6 +519,8 @@ DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'entropy', 'split
 
 This is an important section in your report. Try to spend more time on this section. 
 
+\subsection{Results}
+
 \begin{table}[!ht]
 \centering
 \caption{The caption needs to be short and informative\label{tab:sample}}
@@ -399,18 +539,25 @@ avg / total  & 0.79      & 0.77   &          &         \\ \hline
 %
 }
 \end{table}
-You can split \verb!Results! and \verb!Discussion! sections. Use the possibility of adding table \ref{tab:sample} and figure \ref{fig:boxplot} to make your report to be easier to follow for readers! 
-You can use following websites to make your latex table:
-\begin{itemize}
-    \item {\href{https://www.latex-tables.com/}{The first suggestion}}
-    \item {\href{https://www.tablesgenerator.com/}{The second suggestion}}
-\end{itemize}
-Figure \ref{fig:boxplot} is a sample of a figure which you can use in your report. 
-\begin{figure}[!hbtp]
-  \centering
-  \includegraphics[width = 1\linewidth, height = 0.5\linewidth]{boxplot_age_ADS.png}
-  \caption{\scriptsize Box plot of participants age.\label{fig:boxplot}}
-\end{figure}
+
+% You can split \verb!Results! and \verb!Discussion! sections. Use the possibility of adding table \ref{tab:sample} and figure \ref{fig:boxplot} to make your report to be easier to follow for readers! 
+% You can use following websites to make your latex table:
+
+% \begin{itemize}
+%     \item {\href{https://www.latex-tables.com/}{The first suggestion}}
+%     \item {\href{https://www.tablesgenerator.com/}{The second suggestion}}
+% \end{itemize}
+
+% Figure \ref{fig:boxplot} is a sample of a figure which you can use in your report. 
+
+% \begin{figure}[!hbtp]
+%   \centering
+%   \includegraphics[width = 1\linewidth, height = 0.5\linewidth]{boxplot_age_ADS.png}
+%   \caption{\scriptsize Box plot of participants age.\label{fig:boxplot}}
+% \end{figure}
+
+\subsection{Discussion}
+
 % }}}
 
 % Conclusion {{{
@@ -456,14 +603,15 @@ You will find the task descriptions executed by each group member in Table \ref{
                   & Implementation of dataset conversion to Pandas DataFrame representation \\\cline{2-2}
                   & Implementation of data pre-processing (Data cleaning, selection, normalization) \\\cline{2-2}
                   & Define performance measure + cross validation \\\cline{2-2}
-                  & Definition of Grid Search and implementation of grid search framework to iterate over a set of classifer-hyperparameters candidate \\\cline{2-2}
+                  & Definition of Grid Search and implementation of grid search framework to iterate over a set of classifer-hyperparameters candidates \\\cline{2-2}
                   & Performance evaluation with punctuation \\\cline{2-2}
                   & Performance evaluation without punctuation \\\cline{2-2}
                   & Sentiment Grid search benchmark \\\cline{2-2}
                   & Topic Grid search benchmark \\\cline{2-2}
-                  & Final benchmark assessment \\\cline{2-2}
-                  & Best model selection \\\cline{2-2}
-                  & Formulate abstract, introduction, discussion and conclusion sections \\\cline{2-2}
+                  % & Final benchmark assessment \\\cline{2-2}
+                  % & Best model selection \\\cline{2-2}
+                  % & Formulate abstract, introduction, discussion and conclusion sections \\\cline{2-2}
+                  & Formulate abstract, introduction conclusion sections \\\cline{2-2}
                   & Format the report template \\
 
 \hline
