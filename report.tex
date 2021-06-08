@@ -114,8 +114,8 @@ In this study, we are working with a dataset of reviews. Our goal is to classifi
 
 % Data {{{
 \section{Data}%Alex
-Our data represents reviews for certain products. The reviews have been categorised by sentiment and topic. The sentiment is divided in two values, negative and positive. The topic is divided in 6 different types of products, books, camera, dvd, health, music, software. The data has also an id for each review, which represents the name of the text file the review comes from. And finally we have the text category, which is the textual comment part of the review.\newline
-We have in total 6000 reviews in our dataset. Each row of our data represents a review and the column represent each the topic, sentiment, id and text.  
+Our data represents reviews for certain products. The reviews have been categorised by sentiment and topic. The sentiment is divided into two values, negative and positive. The topic is divided into 6 different types of products, books, camera, dvd, health, music, software. The data has also an id for each review, which represents the name of the text file the review comes from. And finally, we have the text category, which is the textual comment part of the review.\newline
+We have in total 6000 reviews in our dataset. Each row of our data represents a review and the column represent each topic, sentiment, id and text.  
 
 %In this section, you need to describe your dataset in details. 
 % }}}
@@ -127,7 +127,7 @@ In this section, we investigate data trend, to explore the data and visualize it
 
 \subsection{Loading of data}
 
-Before we can explore the dataset and visualize it, we first need to transform the dataset in to a representation that we can work with. The given dataset is stored in a \textit{.txt} file. In Fig. \ref{fig:dataset_txt}, we visualized the structure of the .txt file. Each row of this file contains a review sample which is delimited by a newline character.
+Before we can explore the dataset and visualize it, we first need to transform the dataset into a representation that we can work with. The given dataset is stored in a \textit{.txt} file. In Fig. \ref{fig:dataset_txt}, we visualized the structure of the .txt file. Each row of this file contains a review sample which is delimited by a newline character.
 
 \begin{figure}[ht]
     \centering
@@ -170,7 +170,7 @@ The function in \ref{lst:load_data} removes any newline or trailing white charac
 
 \subsection{Visualization of data}%Alex
 
-Once we have a data frame to work with we can begin to explore and visualise the data-set. Our goal is to classify the reviews by topic or by sentiment. Thus we need to check if there is any unbalance between those categories.
+Once we have a data frame to work with we can begin to explore and visualise the data set. Our goal is to classify the reviews by topic or by sentiment. Thus we need to check if there is an imbalance between those categories.
 To do so we can call the value\_counts() method from pandas. and plot the result in a pie.
 \begin{lstlisting}
 reviews['sentiment'].value_counts().plot(kind='pie', autopct='%1.1f%%' 
@@ -280,7 +280,7 @@ reviews['id'].duplicate().value_counts
 # True = 5000, False = 1000
 \end{lstlisting}
 
-This tells us that we have 5000 duplicate review ids. In order to verify if the duplicate id values and the text values are dependent we sort the dataframe according to the id value as seen in Fig. \ref{fig:id_sort}.
+This tells us that we have 5000 duplicate review ids. To verify if the duplicate id values and the text values are dependent we sort the dataframe according to the id value as seen in Fig. \ref{fig:id_sort}.
 
 \begin{figure}[ht]
     \centering
@@ -344,7 +344,7 @@ We compile every preprocessing and feature engineering steps into a function cal
 
 \paragraph{Classification predictions.} In binary classification, an estimator can two types of predictions: \textit{True} or \textit{False}. True predictions can be either a true positive or a true negative where a model correctly predicts the positive or negative class respectively. The same works for the false positive and false negative predictions where the model makes incorrect predictions.
 
-\paragraph{Conclusion matrix.} An error matrix which visualizes the performance of an algorithm. Each row of the matrix represents the samples of an actual class, whereas the columns represent the samples in a predicted class. Fig. \ref{fig:confusion_matrix} visualizes an example of a confusion matrix.
+\paragraph{Conclusion matrix.} An error matrix that visualizes the performance of an algorithm. Each row of the matrix represents the samples of an actual class, whereas the columns represent the samples in a predicted class. Fig. \ref{fig:confusion_matrix} visualizes an example of a confusion matrix.
 
 \begin{figure}[ht]
     \centering
@@ -353,13 +353,13 @@ We compile every preprocessing and feature engineering steps into a function cal
     \label{fig:confusion_matrix}
 \end{figure}
 
-\paragraph{Accuracy.} A metrix to evaluation the classification of a model. It is defined by the ratio of correct predictions made by the model.
+\paragraph{Accuracy.} A metric to evaluate the classification of a model. It is defined by the ratio of correct predictions made by the model.
 
 \begin{equation}
     Accuracy = \frac{Number \ of \ correct \ predictions}{Total \ number \ of \ predictions}
 \end{equation}
 
-\paragraph{Precision.} Represents the ratio of positive classifications which are actually correct amon the samples classified as positive.
+\paragraph{Precision.} Represents the ratio of positive classifications which are correct among the samples classified as positive.
 
 \begin{equation}
     Precision = \frac{TP}{TP + FP}
@@ -377,7 +377,7 @@ We compile every preprocessing and feature engineering steps into a function cal
     F_1 = \frac{TP}{TP + \frac{1}{2}(FP + FN)}
 \end{equation}
 
-\paragraph{Cross-validation.} Another metric to assess the performance of a classifier is the cross-validation approach. It assesses how a classifier generalizes on an independent data set. With this approach, we are able to detect overfitting of the model and mitigate biased slection of the training and testing subsets. This method has the following process:
+\paragraph{Cross-validation.} Another metric to assess the performance of a classifier is the cross-validation approach. It assesses how a classifier generalizes on an independent data set. With this approach, we can detect the overfitting of the model and mitigate a biased selection of the training and testing subsets. This method has the following process:
 
 \begin{itemize}
     \item Split the dataset into $k$ subsets
@@ -385,7 +385,7 @@ We compile every preprocessing and feature engineering steps into a function cal
     \item Take the mean of the scores of these $k$ classifiers to assess the overall accuracy performance
 \end{itemize}
 
-A visualization of K-Fold, an example of cross-validation, is given is Fig. \ref{fig:cross_validation}.
+A visualization of K-Fold, an example of cross-validation, is given in Fig. \ref{fig:cross_validation}.
 
 \begin{figure}[ht]
     \centering
@@ -400,7 +400,7 @@ A visualization of K-Fold, an example of cross-validation, is given is Fig. \ref
 % If you want to use any math for this section, there is a software that if you give it a picture of your math, you will get the latex code for that math :). The name of the software is \textbf{Mathpix snip}.
 
 
-\subsubsection{Baseline: Topic classifiction} % Alex
+\subsubsection{Baseline: Topic classification} % Alex
 Here we will try to create a model, also called classifier, that will classify reviews into specific topics. 
 To train a model we need our data processed and split into a training and testing set. In the splitting process we create 4 variables. 
 \begin{itemize}
@@ -441,19 +441,19 @@ accuracy = accuracy_score(y_test, predictions)
 \end{lstlisting}
 The accuracy can also be found in the classification report but, accuracy\_score() is more precise. We get from these three methods all the performance measures we need, explained in section 4.5.
 From trying out all the models Multinomial Naive Bayes and SVC are our best guesses to work with. But in later section we will present better option to find the most optimised model.
-\subsubsection{Baseline: Sentiment classifiction}
+\subsubsection{Baseline: Sentiment classification}
 
 \textcolor{red}{Santatra}
 
 \subsubsection{Performance evaluation with punctuation}
 
-\paragraph{Sentiment classifiction.}
+\paragraph{Sentiment classification.}
 
-In this section, we show case the test accuracies for the sentiment classifiction. In Fig. \ref{tab:sentiment_without_punctuation} we trained the models without including punctuations, whereas in Fig. \ref{tab:sentiment_with_punctuation} we included them during the training.
+In this section, we showcase the test accuracies for the sentiment classification. In Fig. \ref{tab:sentiment_without_punctuation} we trained the models without including punctuations, whereas in Fig. \ref{tab:sentiment_with_punctuation} we included them during the training.
 
 \begin{table}[!ht]
 \centering
-\caption{Sentiment classifiction test accuracy scores without punctuation.}
+\caption{Sentiment classification test accuracy scores without punctuation.}
 \label{tab:sentiment_without_punctuation}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{0.6\linewidth}{!}{%
@@ -472,7 +472,7 @@ DecisionTreeClassifier & 0.687 \\ \hline
 
 \begin{table}[!ht]
 \centering
-\caption{Sentiment classifiction test accuracy scores with punctuation.}
+\caption{Sentiment classification test accuracy scores with punctuation.}
 \label{tab:sentiment_with_punctuation}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{0.6\linewidth}{!}{%
@@ -489,13 +489,13 @@ DecisionTreeClassifier & 0.663 \\ \hline
 }
 \end{table}
 
-\paragraph{Topic classifiction.}
+\paragraph{Topic classification.}
 
-In this section, we show case the test accuracies for the topic classifiction. In Fig. \ref{tab:topic_without_punctuation} we trained the models without including punctuations, whereas in Fig. \ref{tab:topic_with_punctuation} we included them during the training.
+In this section, we show case the test accuracies for the topic classification. In Fig. \ref{tab:topic_without_punctuation} we trained the models without including punctuations, whereas in Fig. \ref{tab:topic_with_punctuation} we included them during the training.
 
 \begin{table}[ht]
 \centering
-\caption{Topic classifiction test accuracy scores without punctuation.}
+\caption{Topic classification test accuracy scores without punctuation.}
 \label{tab:topic_without_punctuation}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{0.6\linewidth}{!}{%
@@ -514,7 +514,7 @@ DecisionTreeClassifier & 0.798 \\ \hline
 
 \begin{table}[ht]
 \centering
-\caption{Topic classifiction test accuracy scores with punctuation.}
+\caption{Topic classification test accuracy scores with punctuation.}
 \label{tab:topic_with_punctuation}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{0.6\linewidth}{!}{%
@@ -531,25 +531,21 @@ DecisionTreeClassifier & 0.797 \\ \hline
 }
 \end{table}
 
-During this analysis, we observed that the overall performance of the models improve when including the punctuation in the review text when training the models.
-
-\subsection{Ensemble methods}
-
-\textcolor{red}{Santatra}
+During this analysis, we observed that the overall performance of the models improves when including the punctuation in the review text when training the models.
 
 \subsection{Grid Search}
 
-Grid search is an approach to find the optimal hyperparameters of a model which yields the most accurate predictions. Hyperparameter is a characteristics of an estimator which cannot be learned from data. These hyperparameters have to be set before training. During grid search we try to find the best hyperparameters values through an exhaustive search over specified parameter values for an estimator.
+Grid search is an approach to find the optimal hyperparameters of a model which yields the most accurate predictions. Hyperparameter is a characteristic of an estimator which cannot be learned from data. These hyperparameters have to be set before training. During grid search, we try to find the best hyperparameters values through an exhaustive search over specified parameter values for an estimator.
 
-For this study, we implemented a grid search framework which iterates over possible estimator candidates and executes grid search for each classifer while considering the defined hyperparameter search space.
+For this study, we implemented a grid search framework that iterates over possible estimator candidates and executes grid search for each classifier while considering the defined hyperparameter search space.
 
 \subsubsection{Grid Search: Base classifiers}
 
-We executed grid search for both sentiment and topic classification tasks. The best hyperparameters for the sentiment and topic classification task can be consulted in Table \ref{tab:sentiment_gs} and in Table \ref{tab:topic_gs} respectively. The \textit{best\_score} in these tables represent the training accuracies.
+We executed a grid search for both sentiment and topic classification tasks. The best hyperparameters for the sentiment and topic classification task can be consulted in Table \ref{tab:sentiment_gs} and in Table \ref{tab:topic_gs} respectively. The \textit{best\_score} in these tables represent the training accuracies.
 
 \begin{table}[!ht]
 \centering
-\caption{Best hyperparameters found during grid search for the sentiment classifiction task.}
+\caption{Best hyperparameters found during grid search for the sentiment classification task.}
 \label{tab:sentiment_gs}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{\linewidth}{!}{%
@@ -568,7 +564,7 @@ DecisionTreeClassifier & \{'class\_weight': 'balanced', 'criterion': 'entropy', 
 
 \begin{table}[!ht]
 \centering
-\caption{Best hyperparameters found during grid search for the topic classifiction task.}
+\caption{Best hyperparameters found during grid search for the topic classification task.}
 \label{tab:topic_gs}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{\linewidth}{!}{%
@@ -591,7 +587,7 @@ DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'gini', 'splitter
 
 \begin{table}[!ht]
 \centering
-\caption{Best hyperparameters found during grid search for the sentiment classifiction task.}
+\caption{Best hyperparameters found during grid search for the sentiment classification task.}
 \label{tab:sentiment_em_gs}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{\linewidth}{!}{
@@ -610,7 +606,7 @@ DecisionTreeClassifier & \{'class\_weight': 'balanced', 'criterion': 'entropy', 
 
 \begin{table}[!ht]
 \centering
-\caption{Best hyperparameters found during grid search for the topic classifiction task.}
+\caption{Best hyperparameters found during grid search for the topic classification task.}
 \label{tab:topic_em_gs}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{\linewidth}{!}{%
@@ -640,12 +636,12 @@ DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'entropy', 'split
 \centering
 \caption{Sentiment classification final assessment\label{tab:sentimentassessment}}
 \small\addtolength{\tabcolsep}{-4pt}
-\resizebox{\linewidth}{!}{
+\resizebox{0.6\linewidth}{!}{
 \begin{tabular}{|l|l|l|}
 \hline
              & best\_score\\ \hline
-Stacking Classifier     & 0.833     \\ \hline
-SVC                     & 0.825     \\ \hline
+\textbf{Stacking Classifier}     & \textbf{0.833}     \\ \hline
+\textbf{SVC}                     & \textbf{0.825}     \\ \hline
 Extra Trees Classifier  & 0.814     \\ \hline
 MultinomialNB           & 0.813     \\ \hline
 RandomForestClassifier  & 0.805     \\ \hline
@@ -662,12 +658,12 @@ DecisionTreeClassifier  & 0.663     \\ \hline
 \centering
 \caption{Topic classification final assessment\label{tab:topicassessment}}
 \small\addtolength{\tabcolsep}{-4pt}
-\resizebox{\linewidth}{!}{
+\resizebox{0.6\linewidth}{!}{
 \begin{tabular}{|l|l|l|}
 \hline
              & best\_score\\ \hline
-Stacking Classifier     & 0.929     \\ \hline
-MultinomialNB           & 0.923     \\ \hline
+\textbf{Stacking Classifier}     & \textbf{0.929}     \\ \hline
+\textbf{MultinomialNB}           & \textbf{0.923}     \\ \hline
 SVC                     & 0.919     \\ \hline
 Bagging Classifier      & 0.907     \\ \hline
 Extra Trees Classifier  & 0.893     \\ \hline
@@ -717,7 +713,7 @@ We can imagine the final step of a project like this one as such:
 % This is a template for your report, please submit the pdf file for your report at the end. 
 % The name of pdf file should be:
 
-We presented our work on sentiment analysis for the \textit{text} project from phase 2 of the DSH course. During this project, we try to classifiy product reviews to a sentiment or a review topic. We achieved for sentiment and topic classification test accuracies of 0.833\% and 0.929\% respectively.
+We presented our work on sentiment analysis for the \textit{text} project from phase 2 of the DSH course. During this project, we try to classify product reviews to a sentiment or a review topic. We achieved for sentiment and topic classification test accuracies of 0.833\% and 0.929\% respectively.
 
 These test accuracies were obtained by the stacking classifiers. We discussed which type of classifiers should be selected and concluded that it depends on the setting in which it will be used.
 % }}}
