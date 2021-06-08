@@ -113,11 +113,11 @@ In this study, we are working with a dataset of reviews. Our goal is to classifi
 % }}}
 
 % Data {{{
-\section{Data}
+\section{Data}%Alex
+Our data represents reviews for certain products. The reviews have been categorised by sentiment and topic. The sentiment is divided in two values, negative and positive. The topic is divided in 6 different types of products, books, camera, dvd, health, music, software. The data has also an id for each review, which represents the name of the text file the review comes from. And finally we have the text category, which is the textual comment part of the review.\newline
+We have in total 6000 reviews in our dataset. Each row of our data represents a review and the column represent each the topic, sentiment, id and text.  
 
-\textcolor{red}{Alex}
-
-In this section, you need to describe your dataset in details. 
+%In this section, you need to describe your dataset in details. 
 % }}}
 
 % EDA {{{
@@ -127,7 +127,7 @@ In this section, we investigate data trend, to explore the data and visualize it
 
 \subsection{Loading of data}
 
-Before we can explore the dataset and visualize it, we first need to transform the dataset in to a representation that we can work with. The given dataset is stored it a \textit{.txt} file. In Fig. \ref{fig:dataset_txt}, we visualized the structure of the .txt file. Each row of this file contains a review sample which is delimited by a newline character.
+Before we can explore the dataset and visualize it, we first need to transform the dataset in to a representation that we can work with. The given dataset is stored in a \textit{.txt} file. In Fig. \ref{fig:dataset_txt}, we visualized the structure of the .txt file. Each row of this file contains a review sample which is delimited by a newline character.
 
 \begin{figure}[ht]
     \centering
@@ -168,10 +168,87 @@ def trainset_to_df(path):
 
 The function in \ref{lst:load_data} removes any newline or trailing white characters and divides the sample into specific columns: labels, sentiment, id and text.
 
-\subsection{Visualization of data}
+\subsection{Visualization of data}%Alex
 
-\textcolor{red}{Alex}
+Once we have a data frame to work with we can begin to explore and visualise the data-set. Our goal is to classify the reviews by topic or by sentiment. Thus we need to check if there is any unbalance between those categories.
+To do so we can call the value\_counts() method from pandas. and plot the result in a pie.
+\begin{lstlisting}
+reviews['sentiment'].value_counts().plot(kind='pie', autopct='%1.1f%%' 
+)
+\end{lstlisting}
+We can see in figure \ref{fig:sentimentdistribution} that there is no unbalance at all between negative and positive reviews. Here negative are at 50.5\% and positive at 49.5\%. 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{sentimentdistribution.png}
+    \caption{Distribution of sentiment.}
+    \label{fig:sentimentdistribution}
+\end{figure}
 
+Next we want to explore the distribution of topics between our reviews. Same as for our sentiment vale\_counts() method comes in handy but this time we will plot in a bar plot and we need to set the y axis limit to 960 to see better results, because the difference is very small. 
+\begin{lstlisting}
+reviews['topic'].value_counts().plot(kind='bar', ylim=960)
+\end{lstlisting}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{topicdistribution.png}
+    \caption{Distribution of topic.}
+    \label{fig:topicdistribution}
+\end{figure}
+
+We can see in figure \ref{fig:topicdistribution} that the topic are well distributed. There is not one topic that has a significant difference in amount of reviews compared to the others. We can see thought, that music and dvd have more reviews than health and camera which can indicated that those product are more used then the others. 
+
+Next we want to see if the sentiment are well distributed among the topics. This will show us if there is an unbalance in that category to be aware of.
+Here the value\_counts() is not enough. We need the goupby() method of pandas combined with the count()and unstack() method.
+\begin{lstlisting}
+reviews.groupby(['topic', 'sentiment']).sentiment.count().unstack().plot(kind='bar', ylim=400)
+\end{lstlisting}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{sentimentpertopic.png}
+    \caption{Distribution of sentiment per topic.}
+    \label{fig:sentimentpertopic}
+\end{figure}
+Figure \ref{fig:sentimentpertopic} indicates that the distribution of sentiment per topic is balanced. We can see that software and camera have the most balanced distribution.
+
+As for curiosity we wanted to explore the text length of our reviews to see if there were any observation we could discover. First we will check the text length of each review and see if we can observe anything.
+\begin{lstlisting}
+ lengths_of_reviews = [len(review) for review in reviews['text']]
+ plt.boxplot(lengths_of_reviews)
+ plt.show()
+\end{lstlisting}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{textlengthdistribution.png}
+    \caption{text length of our reviews}
+    \label{fig:textlengthdistribution}
+\end{figure}
+From figure \ref{fig:textlengthdistribution} we can see that 4 reviews stand out with a large number for its text length. We decided to leave those reviews, because we thought it would not make a difference in the training of the model.\newline
+One last observation we wanted to do with our data-set, is to create a word-cloud with the text of our reviews. It could give us insight in what is important in that text for the pre-processing part of this project.
+
+To do so we use WordCloud, a class offered by the worldcloud library. We create our word-cloud with some parameters and generate the words to show with the filtered text of the reviews and divided them by sentiment, to have a word-cloud by sentiment. Moreover  we decided to not include stopwords in this example. Later We will see that it can have an slight effect on the performance of the model.
+\begin{lstlisting}
+wordcloud = WordCloud(width=1000, height=1000, margin=0).generate(negative_words_withoutStopwords)
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis("off")
+plt.margins(x=0, y=0)
+plt.show()
+\end{lstlisting}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{negativewordcloud.png}
+    \caption{negative word-cloud.}
+    \label{fig:negativewordcloud}
+\end{figure}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{positivewordcloud.png}
+    \caption{positive word-cloud.}
+    \label{fig:positivewordcloud}
+\end{figure}
+The negative word-cloud (fig \ref{fig:negativewordcloud}) shows a that the \textit{nt} is more present than in the positive one. The word \textit{great} is more present in the positive word-cloud than in the negative one. 
+
+The word-cloud made us debate if taking the stop word out was a good idea or not, same for the punctuation.
+Overall we could see that the dataset is clean and has no anomalies. We can work with it without having to use Imputers or balancing out the sentiment or topics.  
 % In this section, you need to investigate data trend, to explore the data and visualize it. The most important part of understanding the data is identifying the questions that you want to answer and then the second important part is to summarize their main characteristics, often plotting them visually. The plotting in EDA consists of Histograms, Box plot, Scatter plot, and many more. 
 % }}}
 
@@ -317,15 +394,53 @@ A visualization of K-Fold, an example of cross-validation, is given is Fig. \ref
     \label{fig:cross_validation}
 \end{figure}
 
-\subsection{Baseline: Training of a Naive Bayes model}
+\subsection{Baseline: Training of a model}
 
 % For this section, we need to have a clear overview of your method so try to be precise and explain it in a short form that someone else can understand it easily. 
 % If you want to use any math for this section, there is a software that if you give it a picture of your math, you will get the latex code for that math :). The name of the software is \textbf{Mathpix snip}.
 
-\subsubsection{Baseline: Topic classifiction}
 
-\textcolor{red}{Alex}
+\subsubsection{Baseline: Topic classifiction} % Alex
+Here we will try to create a model, also called classifier, that will classify reviews into specific topics. 
+To train a model we need our data processed and split into a training and testing set. In the splitting process we create 4 variables. 
+\begin{itemize}
+    \item X\_train is the data used to classify the reviews during training process. In this case it is the text of our reviews. 
+    \item y\_train is the label used to tell the model if he classified correctly or not during training process. In this case the topics of our reviews.
+    \item X\_test is the data used to classify the reviews during testing process.
+    \item y\_test is the label used to tell the model if he classified correctly or not during testing process.
+\end{itemize} 
 
+The splitting is handled with the train\_test\_split() method from sklearn framework. We give this method as parameters, the data, the labels and the percentage size the testing part should have.
+\begin{lstlisting}
+X_train, X_test, y_train, y_test = train_test_split(processedText, labels, test_size=0.2, random_state=0)
+\end{lstlisting}
+
+Once we have our training and testing variables we need to create the model that will be trained and classify our data.
+Sklearn gives us many option to chose from and we will try 4 of them with default hyper parameters. Once we found good options for our model we can try different hyper parameters to optimise the classification.
+
+\begin{lstlisting}
+model = MultinomialNB()
+model = RandomForestClassifier()
+model = SVC()
+model = KNeighborsClassifier()
+\end{lstlisting}
+From there we can comment out all but one model and train it with our data. Using fit() method and giving X\_train and y\_train as parameters the model will train using those variables and learn until it went through the whole set.
+\begin{lstlisting}
+model.fit(X_train, y_train)
+\end{lstlisting}
+Once the training is done we want to know how efficient our model is at classifying our reviews. We use our testing variable for this task and the predict() method, to save the prediction in a new variable.
+\begin{lstlisting}
+predictions = text_classifier.predict(X_test)
+\end{lstlisting}
+With the prediction saved in a variable we can now use them and compare them to the correct labels and calculate the different performance measures. 
+Here three methods are very useful:
+\begin{lstlisting}
+cm = confusion_matrix(y_test, predictions)
+cr = classification_report(y_test,predictions)
+accuracy = accuracy_score(y_test, predictions)
+\end{lstlisting}
+The accuracy can also be found in the classification report but, accuracy\_score() is more precise. We get from these three methods all the performance measures we need, explained in section 4.5.
+From trying out all the models Multinomial Naive Bayes and SVC are our best guesses to work with. But in later section we will present better option to find the most optimised model.
 \subsubsection{Baseline: Sentiment classifiction}
 
 \textcolor{red}{Santatra}
@@ -479,7 +594,7 @@ DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'gini', 'splitter
 \caption{Best hyperparameters found during grid search for the sentiment classifiction task.}
 \label{tab:sentiment_em_gs}
 \small\addtolength{\tabcolsep}{-4pt}
-\resizebox{\linewidth}{!}{%
+\resizebox{\linewidth}{!}{
 \begin{tabular}{|c|c|c|c|}
 \hline
 classifier & best\_params & best\_score & std\_test\_score \\ \hline
@@ -515,30 +630,56 @@ DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'entropy', 'split
 % }}}
 
 % Results and discussion {{{
-\section{Results \& Discussion}
+\section{Results \& Discussion}%Alex
 
-This is an important section in your report. Try to spend more time on this section. 
-
+%This is an important section in your report. Try to spend more time on this section.
 \subsection{Results}
+
 
 \begin{table}[!ht]
 \centering
-\caption{The caption needs to be short and informative\label{tab:sample}}
+\caption{Sentiment classification final assessment\label{tab:sentimentassessment}}
 \small\addtolength{\tabcolsep}{-4pt}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{|l|l|l|l|l|}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{|l|l|l|}
 \hline
-             & precision & recall & f1-score & support \\ \hline
-least        & 0.85      & 0.69   &          &         \\ \hline
-left         & 0.68      & 0.79   &          &         \\ \hline
-left-center  & 0.65      & 0.78   &          &         \\ \hline
-right        & 0.99      & 0.85   &          &         \\ \hline
-right-center & 0.44      & 0.07   &          &         \\ \hline
-avg / total  & 0.79      & 0.77   &          &         \\ \hline
-\end{tabular}
-%
-}
+             & best\_score\\ \hline
+Stacking Classifier     & 0.833     \\ \hline
+SVC                     & 0.825     \\ \hline
+Extra Trees Classifier  & 0.814     \\ \hline
+MultinomialNB           & 0.813     \\ \hline
+RandomForestClassifier  & 0.805     \\ \hline
+Bagging Classifier      & 0.801     \\ \hline
+XGBoost                 & 0.788     \\ \hline
+Gradient Boosting       & 0.787     \\ \hline
+KNeighborsClassifier    & 0.732     \\ \hline
+DecisionTreeClassifier  & 0.663     \\ \hline
+
+\end{tabular}}
 \end{table}
+
+\begin{table}[!ht]
+\centering
+\caption{Topic classification final assessment\label{tab:topicassessment}}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{|l|l|l|}
+\hline
+             & best\_score\\ \hline
+Stacking Classifier     & 0.929     \\ \hline
+MultinomialNB           & 0.923     \\ \hline
+SVC                     & 0.919     \\ \hline
+Bagging Classifier      & 0.907     \\ \hline
+Extra Trees Classifier  & 0.893     \\ \hline
+KNeighborsClassifier    & 0.889     \\ \hline
+XGBoost                 & 0.886     \\ \hline
+RandomForestClassifier  & 0.885     \\ \hline
+Gradient Boosting       & 0.865     \\ \hline
+DecisionTreeClassifier  & 0.797     \\ \hline
+
+\end{tabular}}
+\end{table}
+We can see on table \ref{tab:topicassessment} and \ref{tab:sentimentassessment} in order the best scores for each model we have tested with the grid search. The result for both topic and sentiment classification are highest with the Stacking Classifier. These best\_scores are being extracted from the Grid Search explained before and grouped in one table with the results of the base classifiers and the ensemble methods. These results use the data set pre-processed, but doesn't make use of cross-validation. It mainly helped to find the best model to use for classifying reviews. Once the model is selected we can train it using cross-validation and enhance slightly its performance. As said before the best\_score here represents the training accuracy and might be slightly higher than the final testing accuracy. You can find the hyper-parameters and std\_score of the models from table \ref{tab:topicassessment} and \ref{tab:sentimentassessment} in table \ref{tab:topic_gs} and \ref{tab:topic_em_gs} or \ref{tab:sentiment_gs} and \ref{tab:sentiment_em_gs} respectively. Now that we have the results of our research we can discuss on how would be the perfect model for classifying reviews according to sentiment or topic. 
 
 % You can split \verb!Results! and \verb!Discussion! sections. Use the possibility of adding table \ref{tab:sample} and figure \ref{fig:boxplot} to make your report to be easier to follow for readers! 
 % You can use following websites to make your latex table:
@@ -557,6 +698,15 @@ avg / total  & 0.79      & 0.77   &          &         \\ \hline
 % \end{figure}
 
 \subsection{Discussion}
+With the results we clearly see that Stacking Classifier would be the best option in terms of Classifier for this job. Unfortunately it has the disadvantage to require a lot of computing power. With a normal computer it would take numerous minutes to train this kind of model and test it. In case of critical works like health classification such decision would be important, but for this kind of operation SVC or MultinomialNB is probably more adapted. Classifying reviews is not as critical , thus using a lighter model in terms of computing power would be preferable. Moreover the difference here is only of +/- 0.010. \newline
+Another point of discussion is the use of punctuation in data-sets like these. We can clearly imagine a upset customer leaving a review with multiple !, to show his disappointment. Therefore we decided to leave the punctuation in the data-set and not take them away during pre-processing.\newline
+Overall the grid search method used during this project has offered a lot of help in finding the right model and the most suited hyper-parameters. It requires some computing power but it saves a lot of time due to the fact that we can let it run and it executes all the possibilities for us. \newline
+We can imagine the final step of a project like this one as such: 
+\begin{itemize}
+    \item Create an SVC model with hyper-parameters taken from grid search.
+    \item Use our processed data and start training the model using cross-validation.
+    \item use the trained model in an back-end application to classify reviews according to their sentiment or topic, depending what you trained our model for.
+\end{itemize}
 
 % }}}
 
@@ -606,7 +756,7 @@ You will find the task descriptions executed by each group member in Table \ref{
 
 \multirow{2}{*}{\textbf{Leminh Nguyen}}
 
-                  & Helping out with implementing the data visualization \\\cline{2-2}
+                  & Helping out with implementing the data visualisation \\\cline{2-2}
                   & Implementation of dataset conversion to Pandas DataFrame representation \\\cline{2-2}
                   & Implementation of data pre-processing (Data cleaning, selection, normalization) \\\cline{2-2}
                   & Define performance measure + cross validation \\\cline{2-2}
@@ -625,10 +775,12 @@ You will find the task descriptions executed by each group member in Table \ref{
 
 \multirow{2}{*}{\textbf{Alex Poldrugo}}
 
-                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
-                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
-                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
-                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\
+                  & Implementing the data visualisation.\\\cline{2-2}
+                  & Perform the review to topic classification.\\\cline{2-2}
+                  & Include KNN model to our research.\\\cline{2-2}
+                  & Formulate Baseline model, NB and SVC model explanation and visualisation of data section.\\\cline{2-2}
+                  & Formulate Result and Discussion section.\\\cline{2-2}
+                  & Code comparison.\\
 
 \hline
 
