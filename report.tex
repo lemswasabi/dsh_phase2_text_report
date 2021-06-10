@@ -83,8 +83,8 @@
 \textsuperscript{1}, Alex Poldrugo\textsuperscript{2}, Rafidison Santatra Rakotondrasoa\textsuperscript{3},\\
 %\vspace{0pt}
 \\
-\textsuperscript{1}0180531722,  \textsuperscript{2} Your student number \textsuperscript{3} your student number \\
-\texttt{\{le.nguyen.001, second name, \& third name\}@student.uni.lu} \\ %in case your adding Lu email address use this template and if you want to add different email address from your coauthor use the following template. 
+\textsuperscript{1}0180531722,  \textsuperscript{2} Your student number \textsuperscript{3} 0190252530\\
+\texttt{\{le.nguyen.001, second name, \& rafidison.rakotondrasoa.001\}@student.uni.lu} \\ %in case your adding Lu email address use this template and if you want to add different email address from your coauthor use the following template. 
 % \texttt{nnn.xzx23@yahoo.com}\\
 % \texttt{xxx.yyy@yahoo.com}
 }
@@ -323,11 +323,77 @@ review['topic'] = le.transform(reviews['topic'])
 
 \subsection{Text Representation}
 
-\textcolor{red}{Santatra}
+Here we want to talk about a lot of the different ways we can represent words to use in machine learning. As we already mentioned before, we want to identify the sentiment that can be found in a text using a learning model. But, we will work with learning model which will not process data in raw form (text), then we need to convert text in the form of numbers, specifically some numeric vectors. We cannot simply give these sentences to a learning model and ask it to tell us whether a text was positive or negative. We need to perform certain text preprocessing steps, this is where Bag Of Words (BOW) and TF-IDF are introduced. We can represent a sentence as a bag of words vector (a string of numbers). The idea is to create vector features from text which will represent the text. We saw two ways to do that: \emph{Count Vectorizer} and \emph{TF-IDF vectorizer}.
+
+\subsubsection{Count Vectorizer}
+
+Count Vectorization is one of the most basic ways we can represent text data numerically. The idea is very simple, we will be creating vectors that have a dimensionality equal to the size of our vocabulary, and if the text data features that vocab word, we will put a one in that dimension. Every time we encounter that word again, we will increase the count, leaving 0s everywhere we did not find the word even once.
+
+\begin{lstlisting}
+from sklearn.feature_extraction.text import CountVectorizer
+
+cv = CountVectorizer(max_features = None)
+X = cv.fit_transform(reviews['text']).toarray()
+\end{lstlisting}
+
+The figure \ref{fig:countvect} shows how a text will be represented.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=6cm, height=4cm]{1.png}
+    \caption{Count Vectorizer}
+    \label{fig:countvect}
+\end{figure}
+
+\subsubsection{TF-IDF Vectorizer}
+
+TF-IDF stands for Term Frequency-Inverse Document Frequency. It wanst to answer the question "how important a word is to a document in a collection or corpus". We want to compute the TF-IDF score for each word in the corpus. Words with a higher score are more important, and those with a lower score are less important. 
+
+\begin{lstlisting}
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+cv = TfidfVectorizer(max_features = None)
+X = cv.fit_transform(reviews['text']).toarray()
+\end{lstlisting}
+
+The figure \ref{fig:tfidfvect} shows how a text will be represented.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=7cm, height=4cm]{2.png}
+    \caption{TF-IDF Vectorizer}
+    \label{fig:tfidfvect}
+\end{figure}
 
 \subsection{Feature Selection}
 
-\textcolor{red}{Santatra}
+Feature selection is an interesting process because we want to avoid the features that are not relevant. From the previous section, we got feature vectors as a result to represent the data text, however vectors contain too much zeros and irrelevant data. In this section, we want to select only the important features that will be necessary for the sentiment and topic classification. For that, we saw two kinds of feature classification, which are \emph{removing features with low variance} and \emph{rnivariate feature selection}.
+
+\subsubsection{Removing features with low variance}
+
+We use VarianceThreshold to do feature selection on our sample vectors. By default, it removes all zero-variance features, i.e. features that have the same value in all samples (partially similar to the TF-IDF features creation).
+
+The figure \ref{fig:removfeatures} shows the results after selecting features.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=6cm, height=8cm]{3.png}
+    \caption{Removing zero-variance features}
+    \label{fig:removfeatures}
+\end{figure}
+
+\subsubsection{Univariate feature selection}
+
+We perform a Chi-Square test to the samples to retrieve only the k best features.
+
+The figure \ref{fig:univfeature} shows the results after selecting features.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=5cm, height=7cm]{4.png}
+    \caption{Univariate feature selection that retrieves the 4000 best features}
+    \label{fig:univfeature}
+\end{figure}
 
 \subsection{Implementation}
 
@@ -441,9 +507,10 @@ accuracy = accuracy_score(y_test, predictions)
 \end{lstlisting}
 The accuracy can also be found in the classification report but, accuracy\_score() is more precise. We get from these three methods all the performance measures we need, explained in section 4.5.
 From trying out all the models Multinomial Naive Bayes and SVC are our best guesses to work with. But in later section we will present better option to find the most optimised model.
+
 \subsubsection{Baseline: Sentiment classification}
 
-\textcolor{red}{Santatra}
+In order to classify sentiment from our dataset, we used some models as a baseline and compared the results to know which method is better. For sentiment classification, we experimented between different types of learning models such as decision tree classifier, kneighbors classifier, random forest classifier, Naive Bayes model and support vector machine, using the types of text representations and features selections. We noticed that we get better results with TF-IDF vectorizer and the univariate feature selection (with Chi-square test) for our models predictions.
 
 \subsubsection{Performance evaluation with punctuation}
 
@@ -533,6 +600,12 @@ DecisionTreeClassifier & 0.797 \\ \hline
 
 During this analysis, we observed that the overall performance of the models improves when including the punctuation in the review text when training the models.
 
+\subsection{Ensemble methods}
+
+Ensemble methods are techniques that create multiple models and then combine them to produce improved results. We can combine any machine learning algorithm such as logistic regression, decision tree, naive bayes. These models, when used as inputs of ensemble methods, are called ”base models”.
+
+We used ensemble methods for classification and including some widely known methods of ensemble: bagging, boosting and stacking.
+
 \subsection{Grid Search}
 
 Grid search is an approach to find the optimal hyperparameters of a model which yields the most accurate predictions. Hyperparameter is a characteristic of an estimator which cannot be learned from data. These hyperparameters have to be set before training. During grid search, we try to find the best hyperparameters values through an exhaustive search over specified parameter values for an estimator.
@@ -583,8 +656,6 @@ DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'gini', 'splitter
 
 \subsubsection{Grid Search: Ensemble methods}
 
-\textcolor{red}{Santatra}
-
 \begin{table}[!ht]
 \centering
 \caption{Best hyperparameters found during grid search for the sentiment classification task.}
@@ -594,11 +665,11 @@ DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'gini', 'splitter
 \begin{tabular}{|c|c|c|c|}
 \hline
 classifier & best\_params & best\_score & std\_test\_score \\ \hline
-SVC	& \{'C': 10, 'class\_weight': 'balanced', 'kernel': 'rbf', 'probability': True\}	& 0.824	& 0.022 \\ \hline
-MultinomialNB & \{'alpha': 10\}	& 0.807	& 0.031 \\ \hline
-RandomForestClassifier & \{'class\_weight': 'None', 'criterion': 'entropy', 'n\_estimators': 70\}	& 0.802	& 0.014 \\ \hline
-KNeighborsClassifier & \{'n\_neighbors': 85, 'p': 2\}	& 0.742	& 0.017 \\ \hline
-DecisionTreeClassifier & \{'class\_weight': 'balanced', 'criterion': 'entropy', 'splitter': 'best'\}	& 0.692	& 0.024 \\ \hline
+BaggingClassifier & \{'base\_estimator': SVC(C=10, class\_weight='balanced', probability=True), 'max\_samples': 500, 'n\_estimators': 80\}	& 0.807	& 0.031 \\ \hline
+ExtraTreesClassifier & \{'class\_weight': None, 'criterion': 'entropy', 'max\_samples': 400, 'n\_estimators': 90\}	& 0.820	& 0.022 \\ \hline
+GradientBoostingClassifier & \{'learning\_rate': 0.3, 'n\_estimators': 120\}	& 0.784 & 0.013 \\ \hline
+StackingClassifier & \{'final\_estimator': LogisticRegression(solver='liblinear')\}	& 0.822	& 0.019 \\ \hline
+XGBClassifier & \{'learning\_rate': 0.3, 'n\_estimators': 130\} & 0.794 & 0.023 \\ \hline
 \end{tabular}
 %
 }
@@ -613,11 +684,11 @@ DecisionTreeClassifier & \{'class\_weight': 'balanced', 'criterion': 'entropy', 
 \begin{tabular}{|c|c|c|c|}
 \hline
 classifier & best\_params & best\_score & std\_test\_score \\ \hline
-SVC	& \{'C': 10, 'class\_weight': 'balanced', 'kernel': 'rbf', 'probability': True\}	& 0.822	& 0.015 \\ \hline
-MultinomialNB & \{'alpha': 1\}	& 0.807	& 0.013 \\ \hline
-RandomForestClassifier & \{'class\_weight': 'balanced\_subsample', 'criterion': 'gini', 'n\_estimators': 70\}	& 0.800	& 0.005 \\ \hline
-KNeighborsClassifier & \{'n\_neighbors': 95, 'p': 2\}	& 0.743	& 0.01 \\ \hline
-DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'entropy', 'splitter': 'random'\}	& 0.687	& 0.005 \\ \hline
+BaggingClassifier & \{base\_estimator=SVC(C=10, class\_weight='balanced', probability=True), max\_samples=500, n\_estimators=80\}	& 0.907	& 0.009 \\ \hline
+ExtraTreesClassifier & \{'class_weight': 'balanced', 'criterion': 'gini', 'max\_samples': 200, 'n\_estimators': 90\}	& 0.898	& 0.014 \\ \hline
+GradientBoostingClassifier & \{'learning\_rate': 0.2, 'n\_estimators': 120\}	& 0.861	& 0.015 \\ \hline
+StackingClassifier & \{'final\_estimator': LogisticRegression(solver='liblinear')\} & 0.925 & 0.006 \\ \hline
+XGBClassifier & \{'learning\_rate': 0.3, 'n\_estimators': 130\}	& 0.886	& 0.016 \\ \hline
 \end{tabular}
 %
 }
@@ -675,7 +746,7 @@ DecisionTreeClassifier  & 0.797     \\ \hline
 
 \end{tabular}}
 \end{table}
-We can see on table \ref{tab:topicassessment} and \ref{tab:sentimentassessment} in order the best scores for each model we have tested with the grid search. The result for both topic and sentiment classification are highest with the Stacking Classifier. These best\_scores are being extracted from the Grid Search explained before and grouped in one table with the results of the base classifiers and the ensemble methods. These results use the data set pre-processed, but doesn't make use of cross-validation. It mainly helped to find the best model to use for classifying reviews. Once the model is selected we can train it using cross-validation and enhance slightly its performance. As said before the best\_score here represents the training accuracy and might be slightly higher than the final testing accuracy. You can find the hyper-parameters and std\_score of the models from table \ref{tab:topicassessment} and \ref{tab:sentimentassessment} in table \ref{tab:topic_gs} and \ref{tab:topic_em_gs} or \ref{tab:sentiment_gs} and \ref{tab:sentiment_em_gs} respectively. Now that we have the results of our research we can discuss on how would be the perfect model for classifying reviews according to sentiment or topic. 
+We can see on table \ref{tab:topicassessment} and \ref{tab:sentimentassessment} in order the best scores for each model we have tested with the grid search. The result for both topic and sentiment classification are highest with the Stacking Classifier. These best\_scores are being extracted from the Grid Search explained before and grouped in one table with the results of the base classifiers and the ensemble methods. These results use the data set pre-processed and makes use of cross-validation with k=5. It mainly helped to find the best model to use for classifying reviews. As said before the best\_score here represents the training accuracy and might be slightly higher than the final testing accuracy. You can find the hyper-parameters and std\_score of the models from table \ref{tab:topicassessment} and \ref{tab:sentimentassessment} in table \ref{tab:topic_gs} and \ref{tab:topic_em_gs} or \ref{tab:sentiment_gs} and \ref{tab:sentiment_em_gs} respectively. Now that we have the results of our research we can discuss on how would be the perfect model for classifying reviews according to sentiment or topic. 
 
 % You can split \verb!Results! and \verb!Discussion! sections. Use the possibility of adding table \ref{tab:sample} and figure \ref{fig:boxplot} to make your report to be easier to follow for readers! 
 % You can use following websites to make your latex table:
@@ -782,9 +853,13 @@ You will find the task descriptions executed by each group member in Table \ref{
 
 \multirow{2}{*}{\textbf{Rafidison Rakotondrasoa}}
 
-                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
-                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\\cline{2-2}
-                  & Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quam arcu, scelerisque id fringilla ut, finibus ut ligula. Aliquam sagittis.  \\
+                  & Implementing two types of text representations  \\\cline{2-2}
+                  & Implementing two types of feature selections \\\cline{2-2}
+                  & Using our baseline model, comparison of the results for sentiment classification with the text representation and feature selection methods.  \\\cline{2-2}
+                  & Making research on ensemble methods including the different types of algorithms and its implementations. 
+                  \\\cline{2-2}
+                  & GridSearch for the ensemble method models.
+                  \\
 
 \hline
 
