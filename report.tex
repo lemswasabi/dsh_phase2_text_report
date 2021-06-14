@@ -84,7 +84,7 @@
 %\vspace{0pt}
 \\
 \textsuperscript{1}0180531722,  \textsuperscript{2} 015063762f \textsuperscript{3} 0190252530\\
-\texttt{\{le.nguyen.001, alex.poldrugo.001, \& rafidison.rakotondrasoa.001\}@student.uni.lu} \\ %in case your adding Lu email address use this template and if you want to add different email address from your coauthor use the following template. 
+\texttt{\{le.nguyen, alex.poldrugo, \& rafidison.rakotondrasoa\}.001@student.uni.lu} \\ %in case your adding Lu email address use this template and if you want to add different email address from your coauthor use the following template. 
 % \texttt{nnn.xzx23@yahoo.com}\\
 % \texttt{xxx.yyy@yahoo.com}
 }
@@ -621,11 +621,11 @@ For this study, we implemented a grid search framework that iterates over possib
 
 \subsubsection{Grid Search: Base classifiers}
 
-We executed a grid search for both sentiment and topic classification tasks. The best hyperparameters for the sentiment and topic classification task can be consulted in the Appendix in Table \ref{tab:sentiment_gs} and in Table \ref{tab:topic_gs} respectively. The \textit{best\_score} in these tables represent the training accuracies.
+We executed a grid search for both sentiment and topic classification tasks. The best hyperparameters for the sentiment and topic classification task can be consulted in the Appendix in Table \ref{tab:sentiment_gs_hp} and \ref{tab:topic_gs_hp} respectively. The scores can be consulted in the Appendix in Table \ref{tab:sentiment_gs} and \ref{tab:topic_gs}. The \textit{best\_score} in these tables represent the training accuracies.
 
 \subsubsection{Grid Search: Ensemble methods}
 
-The best hyperparameters of the ensemble methods for the sentiment and topic classification task can be consulted in the Appendix in Table \ref{tab:sentiment_em_gs} and in Table \ref{tab:topic_em_gs} respectively. The \textit{best\_score} in these tables represent the training accuracies.
+The best hyperparameters of the ensemble methods for the sentiment and topic classification task can be consulted in the Appendix in Table \ref{tab:sentiment_em_gs_hp} and \ref{tab:topic_em_gs_hp} respectively. The scores can be consulted in the Appendix in Table \ref{tab:sentiment_em_gs} and \ref{tab:topic_em_gs}. The \textit{best\_score} in these tables represent the training accuracies.
 
 % }}}
 
@@ -824,6 +824,8 @@ DecisionTreeClassifier & 0.800	& 0.023 \\ \hline
 %
 }
 \end{table}
+
+\newpage
 
 \subsubsection{Tuned hyperparameters of ensemble methods}
 
