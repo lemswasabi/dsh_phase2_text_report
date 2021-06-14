@@ -83,7 +83,7 @@
 \textsuperscript{1}, Alex Poldrugo\textsuperscript{2}, Rafidison Santatra Rakotondrasoa\textsuperscript{3},\\
 %\vspace{0pt}
 \\
-\textsuperscript{1}0180531722,  \textsuperscript{2} Your student number \textsuperscript{3} 0190252530\\
+\textsuperscript{1}0180531722,  \textsuperscript{2} 015063762f \textsuperscript{3} 0190252530\\
 \texttt{\{le.nguyen.001, alex.poldrugo.001, \& rafidison.rakotondrasoa.001\}@student.uni.lu} \\ %in case your adding Lu email address use this template and if you want to add different email address from your coauthor use the following template. 
 % \texttt{nnn.xzx23@yahoo.com}\\
 % \texttt{xxx.yyy@yahoo.com}
@@ -107,8 +107,9 @@
 
 % Problem statement
 
-In this study, we are working with a dataset of reviews. Our goal is to classifiy the review samples according to their sentiment, which can be \textit{negative} or \textit{positive}. Additionally, we classifiy these samples to the topic of the reviews: \textit{books}, \textit{camera}, \textit{dvd}, \textit{health}, \textit{music} or \textit{software}.
-
+In this study, we are working with a dataset of reviews. Our goal is to classify the review samples according to their sentiment, which can be \textit{negative} or \textit{positive}. Additionally, we classify these samples to the topic of the reviews: \textit{books}, \textit{camera}, \textit{dvd}, \textit{health}, \textit{music} or \textit{software}.\newline
+In order to do so we experimented with different types of model provided by the scikit-learn library. We tried to find the best model that can classify our reviews into the said categories. To find the best model we used grid search which makes an exhaustive search with given parameters to find the model with the best accuracy.\newline
+In this project we go through all the steps and explain how we explore the data set, find the best model and how to train a model. 
 % We use the modules in scikit-learn to split data into training and testing sets. And we train the data and estimate how well it is likely to perform on out-of-sample data through evaluation functions such as precision, recall, f-score, and also with confusion matrix. And the distinct values of prior and posterior probabilities also shows how important is the additional information taken into account. 
 % }}}
 
@@ -127,7 +128,7 @@ In this section, we investigate data trend, to explore the data and visualize it
 
 \subsection{Loading of data}
 
-Before we can explore the dataset and visualize it, we first need to transform the dataset into a representation that we can work with. The given dataset is stored in a \textit{.txt} file. Each row of this file contains a review sample which is delimited by a newline character. Each sample is divided into sections. The first word represents the topic of the review, whereas the second word depicts its sentiment. The third word of the sample serves as id. The rest of the row presents the review text itself. This is visualized in Fig. \ref{fig:review_sample}
+Before we can explore the dataset and visualise it, we first need to transform the dataset into a representation that we can work with. The given dataset is stored in a \textit{.txt} file. Each row of this file contains a review sample which is delimited by a newline character. Each sample is divided into sections. The first word represents the topic of the review, whereas the second word depicts its sentiment. The third word of the sample serves as id. The rest of the row presents the review text itself. This is visualised in Fig. \ref{fig:review_sample}, in which we can see one of the many rows of the dataset. The first word / token represents which topic the review belongs, second one is the sentiment, third one is the id, that determines from which txt file the review has been extracted and the rest of that row is the text of the review.
 
 % In Fig. \ref{fig:dataset_txt}, we visualized the structure of the .txt file.
 % \begin{figure}[ht]
@@ -141,7 +142,7 @@ Before we can explore the dataset and visualize it, we first need to transform t
     \centering
     \includegraphics[width=\linewidth]{review_sample.png}
     % \caption{\scriptsize Layout of a review sample.}
-    \caption{\scriptsize Layout of a review sample.}
+    \caption{\scriptsize Extract from a row of the original dataset plus description.}
     \label{fig:review_sample}
 \end{figure}
 
@@ -176,13 +177,14 @@ To do so we can call the value\_counts() method from pandas. and plot the result
 reviews['sentiment'].value_counts().plot(kind='pie', autopct='%1.1f%%' 
 )
 \end{lstlisting}
-We can see in figure \ref{fig:sentimentdistribution} that there is no unbalance at all between negative and positive reviews. Here negative are at 50.5\% and positive at 49.5\%. 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{sentimentdistribution.png}
-    \caption{\scriptsize Distribution of sentiment.}
+    \caption{\scriptsize Percentage distribution of positive and negative reviews across the dataset}
     \label{fig:sentimentdistribution}
 \end{figure}
+Figure \ref{fig:sentimentdistribution} shows the distribution of sentiment across our datset. Here the orange part represent the percentage of positive reviews in our dataset and blue the negative once. We see that there is no unbalance at all between negative and positive reviews. Here negative are at 50.5\% and positive at 49.5\%. 
+
 
 Next we want to explore the distribution of topics between our reviews. Same as for our sentiment vale\_counts() method comes in handy but this time we will plot in a bar plot and we need to set the y axis limit to 960 to see better results, because the difference is very small. 
 \begin{lstlisting}
@@ -191,11 +193,11 @@ reviews['topic'].value_counts().plot(kind='bar', ylim=960)
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{topicdistribution.png}
-    \caption{\scriptsize Distribution of topic.}
+    \caption{\scriptsize Number of reviews for each topic across the dataset.}
     \label{fig:topicdistribution}
 \end{figure}
 
-We can see in figure \ref{fig:topicdistribution} that the topic are well distributed. There is not one topic that has a significant difference in amount of reviews compared to the others. We can see thought, that music and dvd have more reviews than health and camera which can indicated that those product are more used then the others. 
+Figure \ref{fig:topicdistribution} shows the distribution of topics across our reviews. Each bar represents the number of reviews belonging to the topic specified under it. The topics are well distributed. There is not one topic that has a significant difference in amount of reviews compared to the others. We can see thought, that music and dvd have more reviews than health and camera which can indicated that those product are more used then the others. 
 
 Next we want to see if the sentiment are well distributed among the topics. This will show us if there is an unbalance in that category to be aware of.
 Here the value\_counts() is not enough. We need the goupby() method of pandas combined with the count()and unstack() method.
@@ -205,24 +207,28 @@ reviews.groupby(['topic', 'sentiment']).sentiment.count().unstack().plot(kind='b
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{sentimentpertopic.png}
-    \caption{\scriptsize Distribution of sentiment per topic.}
+    \caption{\scriptsize Number of negative and positive reviews for each topic.}
     \label{fig:sentimentpertopic}
 \end{figure}
-Figure \ref{fig:sentimentpertopic} indicates that the distribution of sentiment per topic is balanced. We can see that software and camera have the most balanced distribution.
+Figure \ref{fig:sentimentpertopic} indicates the distribution of sentiment per topic. Each orange bar shows the amount of positive reviews that belong to the specific topic and the blue bar shows the same but for negative reviews.The distribution of sentiment per topic is balanced as well. We can see that software and camera have the most balanced distribution.
 
 As for curiosity we wanted to explore the text length of our reviews to see if there were any observation we could discover. First we will check the text length of each review and see if we can observe anything.
+
 \begin{lstlisting}
  lengths_of_reviews = [len(review) for review in reviews['text']]
  plt.boxplot(lengths_of_reviews)
  plt.show()
 \end{lstlisting}
+
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{textlengthdistribution.png}
-    \caption{\scriptsize text length of our reviews}
+    \caption{\scriptsize Representation of number of characters in the text part of the review for each review.}
     \label{fig:textlengthdistribution}
 \end{figure}
-From figure \ref{fig:textlengthdistribution} we can see that 4 reviews stand out with a large number for its text length. We decided to leave those reviews, because we thought it would not make a difference in the training of the model.\newline
+
+Figure \ref{fig:textlengthdistribution} shows the text length for each review. Each small circle we can see represents one review and its position on the y axis represent the number of characters in that review. 4 reviews stand out with a large number of characters. We decided to drop those reviews, because we thought it would not make a difference in the training of the model.\newline
+
 One last observation we wanted to do with our data-set, is to create a word-cloud with the text of our reviews. It could give us insight in what is important in that text for the pre-processing part of this project.
 
 To do so we use WordCloud, a class offered by the worldcloud library. We create our word-cloud with some parameters and generate the words to show with the filtered text of the reviews and divided them by sentiment, to have a word-cloud by sentiment. Moreover  we decided to not include stopwords in this example. Later We will see that it can have an slight effect on the performance of the model.
@@ -233,19 +239,21 @@ plt.axis("off")
 plt.margins(x=0, y=0)
 plt.show()
 \end{lstlisting}
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{negativewordcloud.png}
-    \caption{\scriptsize negative word-cloud.}
+    \caption{\scriptsize Word-cloud of the text from negative reviews.}
     \label{fig:negativewordcloud}
 \end{figure}
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{positivewordcloud.png}
-    \caption{\scriptsize positive word-cloud.}
+    \caption{\scriptsize Word-cloud of the text from positive reviews.}
     \label{fig:positivewordcloud}
 \end{figure}
-The negative word-cloud (fig \ref{fig:negativewordcloud}) shows a that the \textit{nt} is more present than in the positive one. The word \textit{great} is more present in the positive word-cloud than in the negative one. 
+The negative word-cloud (fig \ref{fig:negativewordcloud}) shows a that the \textit{nt} is more present than in the positive one (fig \ref{fig:positivewordcloud}). The word \textit{great} is more present in the positive word-cloud than in the negative one. 
 
 The word-cloud made us debate if taking the stop word out was a good idea or not, same for the punctuation.
 Overall we could see that the dataset is clean and has no anomalies. We can work with it without having to use Imputers or balancing out the sentiment or topics.  
@@ -257,7 +265,7 @@ Overall we could see that the dataset is clean and has no anomalies. We can work
 
 \subsection{Data pre-processing}
 
-We load our dataset with our \textit{trainset\_to\_df()} function defined in \ref{lst:load_data}:
+We load our dataset with our \textit{trainset\_to\_df()} function defined in Listing \ref{lst:load_data}:
 
 \begin{lstlisting}
 reviews = trainset_to_df('trainset.txt')
@@ -279,15 +287,15 @@ reviews['id'].duplicate().any()
 reviews['id'].duplicate().value_counts
 # True = 5000, False = 1000
 \end{lstlisting}
-
-This tells us that we have 5000 duplicate review ids. To verify if the duplicate id values and the text values are dependent we sort the dataframe according to the id value as seen in Fig. \ref{fig:id_sort}.
-
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{id_sort.png}
     \caption{\scriptsize First samples of reviews sorted by \textit{id}.}
     \label{fig:id_sort}
 \end{figure}
+This tells us that we have 5000 duplicate review ids. To verify if the duplicate id values and the text values are dependent we sort the dataframe according to the id value as seen in Fig. \ref{fig:id_sort}.
+
+
 
 There is no relation between the id and text columns, therefore we can remove the id column since it won't be useful as a feature:
 
@@ -303,7 +311,7 @@ reviews[reviews['text'].duplicated()].sort_values('text')
 
 We did not find any duplicates in this column.
 
-After dealing with missing and duplicate values, we continue with binarizing and label encode our variables. First we start to binarize our categorical varible in the sentiment column:
+After dealing with missing and duplicate values, we continue with binarizing and label encode our variables. First we start to binarize our categorical variable in the sentiment column:
 
 \begin{lstlisting}
 reviews['sentiment'] = reviews['sentiment'].apply(lambda sentiment: 0 if sentiment == 'neg' else 1)
@@ -327,21 +335,21 @@ Here we want to talk about a lot of the different ways we can represent words to
 
 \subsubsection{Count Vectorizer}
 
-Count Vectorization is one of the most basic ways we can represent text data numerically. The idea is very simple, we will be creating vectors that have a dimensionality equal to the size of our vocabulary, and if the text data features that vocab word, we will put a one in that dimension. Every time we encounter that word again, we will increase the count, leaving 0s everywhere we did not find the word even once.
+Count Vectorization is one of the most basic ways we can represent text data numerically. The idea is very simple, we will be creating vectors that have a dimensionality equal to the size of our vocabulary, and if the text data features that word, we will put a one in that dimension. Every time we encounter that word again, we will increase the count, leaving 0s everywhere we did not find the word even once.
 
-\begin{lstlisting}
-from sklearn.feature_extraction.text import CountVectorizer
+% \begin{lstlisting}
+% from sklearn.feature_extraction.text import CountVectorizer
 
-cv = CountVectorizer(max_features = None)
-X = cv.fit_transform(reviews['text']).toarray()
-\end{lstlisting}
+% cv = CountVectorizer(max_features = None)
+% X = cv.fit_transform(reviews['text']).toarray()
+% \end{lstlisting}
 
-The figure \ref{fig:countvect} shows how a text will be represented.
+Figure \ref{fig:countvect} shows 3 text examples and and how those text vectors after applying Count Vectorizer.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=6cm, height=4cm]{1.png}
-    \caption{\scriptsize Count Vectorizer}
+    \caption{\scriptsize Transformation of text into vectors using Count Vectorizer}
     \label{fig:countvect}
 \end{figure}
 
@@ -349,51 +357,50 @@ The figure \ref{fig:countvect} shows how a text will be represented.
 
 TF-IDF stands for Term Frequency-Inverse Document Frequency. It wanst to answer the question "how important a word is to a document in a collection or corpus". We want to compute the TF-IDF score for each word in the corpus. Words with a higher score are more important, and those with a lower score are less important. 
 
-\begin{lstlisting}
-from sklearn.feature_extraction.text import TfidfVectorizer
+% \begin{lstlisting}
+% from sklearn.feature_extraction.text import TfidfVectorizer
 
-cv = TfidfVectorizer(max_features = None)
-X = cv.fit_transform(reviews['text']).toarray()
-\end{lstlisting}
+% cv = TfidfVectorizer(max_features = None)
+% X = cv.fit_transform(reviews['text']).toarray()
+% \end{lstlisting}
 
-The figure \ref{fig:tfidfvect} shows how a text will be represented.
+Figure \ref{fig:tfidfvect} shows 3 text examples and and how those text vectors after applying Count Vectorizer.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=7cm, height=4cm]{2.png}
-    \caption{\scriptsize TF-IDF Vectorizer}
+    \caption{\scriptsize Transformation of text into vectors using TF-IDF Vectorizer}
     \label{fig:tfidfvect}
 \end{figure}
 
 \subsection{Feature Selection}
 
 Feature selection is an interesting process because we want to avoid the features that are not relevant. From the previous section, we got feature vectors as a result to represent the data text, however vectors contain too much zeros and irrelevant data. In this section, we want to select only the important features that will be necessary for the sentiment and topic classification. For that, we saw two kinds of feature classification, which are \emph{removing features with low variance} and \emph{rnivariate feature selection}.
+\newpage
 
 \subsubsection{Removing features with low variance}
 
-We use VarianceThreshold to do feature selection on our sample vectors. By default, it removes all zero-variance features, i.e. features that have the same value in all samples (partially similar to the TF-IDF features creation).
-
-The figure \ref{fig:removfeatures} shows the results after selecting features.
-
+We use Variance Threshold to do feature selection on our sample vectors. By default, it removes all zero-variance features, i.e. features that have the same value in all samples (partially similar to the TF-IDF features creation).\newline
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=6cm, height=8cm]{3.png}
-    \caption{\scriptsize Removing zero-variance features}
+    \includegraphics[width=5cm, height=6cm]{3.png}
+    \caption{\scriptsize Changes in the data after removing zero-variance features}
     \label{fig:removfeatures}
 \end{figure}
 
-\subsubsection{Univariate feature selection}
+In figure \ref{fig:removfeatures} we can see the number of columns we drop in that process. From 37109 columns after TF-IDF Vectorizer, to 7307 columns after removing the low variance features.
+\subsubsection{Univariante feature selection}
 
-We perform a Chi-Square test to the samples to retrieve only the k best features.
-
-The figure \ref{fig:univfeature} shows the results after selecting features.
-
+We perform a Chi-Square test to the samples to retrieve only the k best features. Here k is 4000.\newline
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=5cm, height=7cm]{4.png}
-    \caption{\scriptsize Univariate feature selection that retrieves the 4000 best features}
+    \includegraphics[width=3.5cm, height=5.5cm]{4.png}
+    \caption{\scriptsize Changes in the data after using Univariate feature selection that retrieves the 4000 best features}
     \label{fig:univfeature}
 \end{figure}
+
+In figure \ref{fig:univfeature} we can see the number of columns we drop in that process. From 37109 columns after TF-IDF Vectorizer, to 4000 columns after performing Chi-square feature selection.
+
 
 \subsection{Implementation}
 
@@ -451,12 +458,12 @@ We compile every preprocessing and feature engineering steps into a function cal
     \item Take the mean of the scores of these $k$ classifiers to assess the overall accuracy performance
 \end{itemize}
 
-A visualization of K-Fold, an example of cross-validation, is given in Fig. \ref{fig:cross_validation}.
+There are multiple version of methods for cross-validation. K-Fold is the method we decide to use in our project. A visualization of it is given in Fig. \ref{fig:cross_validation}.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{cross_validation.png}
-    \caption{\scriptsize K-fold example where $k = 5$.}
+    \caption{\scriptsize cross-validation using K-fold with $k = 5$.}
     \label{fig:cross_validation}
 \end{figure}
 
@@ -513,12 +520,12 @@ From trying out all the models Multinomial Naive Bayes and SVC are our best gues
 In order to classify sentiment from our dataset, we used some models as a baseline and compared the results to know which method is better. For sentiment classification, we experimented between different types of learning models such as decision tree classifier, kneighbors classifier, random forest classifier, Naive Bayes model and support vector machine, using the types of text representations and features selections. We noticed that we get better results with TF-IDF vectorizer and the univariate feature selection (with Chi-square test) for our models predictions.
 
 \subsubsection{Performance evaluation with punctuation}
-
+For the following tables of this section, each will represent two columns with 6 rows. Each row except the first one represents, first the name of the model used and second its accuracy in the testing process.
 \paragraph{Sentiment classification.}
 
 In this section, we showcase the test accuracies for the sentiment classification. In Table \ref{tab:sentiment_without_punctuation} we trained the models without including punctuations, whereas in Table \ref{tab:sentiment_with_punctuation} we included them during the training.
 
-\begin{table}[!ht]
+\begin{table}[h!]
 \centering
 \caption{\scriptsize Sentiment classification test accuracy scores without punctuation.}
 \label{tab:sentiment_without_punctuation}
@@ -537,7 +544,7 @@ DecisionTreeClassifier & 0.687 \\ \hline
 }
 \end{table}
 
-\begin{table}[!ht]
+\begin{table}[h!]
 \centering
 \caption{\scriptsize Sentiment classification test accuracy scores with punctuation.}
 \label{tab:sentiment_with_punctuation}
@@ -560,7 +567,7 @@ DecisionTreeClassifier & 0.663 \\ \hline
 
 In this section, we show case the test accuracies for the topic classification. In Table \ref{tab:topic_without_punctuation} we trained the models without including punctuations, whereas in Table \ref{tab:topic_with_punctuation} we included them during the training.\\
 
-\begin{table}[ht]
+\begin{table}[h!]
 \centering
 \caption{\scriptsize Topic classification test accuracy scores without punctuation.}
 \label{tab:topic_without_punctuation}
@@ -579,7 +586,7 @@ DecisionTreeClassifier & 0.798 \\ \hline
 }
 \end{table}
 
-\begin{table}[ht]
+\begin{table}[h!]
 \centering
 \caption{\scriptsize Topic classification test accuracy scores with punctuation.}
 \label{tab:topic_with_punctuation}
@@ -628,7 +635,7 @@ The best hyperparameters of the ensemble methods for the sentiment and topic cla
 %This is an important section in your report. Try to spend more time on this section.
 \subsection{Results}
 
-We can see in Table \ref{tab:sentimentassessment} and \ref{tab:topicassessment} in order the best scores for each model we have tested with the grid search. The result for both topic and sentiment classification are highest with the Stacking Classifier. These best\_scores are being extracted from the Grid Search explained before and grouped in in table with the results of the base classifiers and the ensemble methods. These results use the data set pre-processed and makes use of cross-validation with k=5. It mainly helped to find the best model to use for classifying reviews. As said before the best\_score here represents the training accuracy and might be slightly higher than the final testing accuracy. You can find the hyper-parameters and std\_score of the models from table \ref{tab:topicassessment} and \ref{tab:sentimentassessment} in table \ref{tab:topic_gs} and \ref{tab:topic_em_gs} or \ref{tab:sentiment_gs} and \ref{tab:sentiment_em_gs} respectively. Now that we have the results of our research we can discuss on how would be the perfect model for classifying reviews according to sentiment or topic. 
+We can see in Table \ref{tab:sentimentassessment} and \ref{tab:topicassessment} in order the best scores for each model we have tested with the grid search. The result for both topic and sentiment classification are highest with the Stacking Classifier. These best\_scores are being extracted from the Grid Search explained before and grouped in this table with the results of the base classifiers and the ensemble methods. These results use the data set pre-processed and makes use of cross-validation with k=5. It mainly helped to find the best model to use for classifying reviews. The best\_score here represents the testing accuracy. You can find the best hyper-parameters for each model in table \ref{tab:sentimentassessment} and \ref{tab:topicassessment} in table \ref{tab:topic_gs_hp} and \ref{tab:topic_em_gs_hp} or \ref{tab:sentiment_gs_hp} and \ref{tab:sentiment_em_gs_hp} respectively. Now that we have the results of our research we can discuss on how would be the perfect model for classifying reviews according to sentiment or topic. 
 
 % You can split \verb!Results! and \verb!Discussion! sections. Use the possibility of adding table \ref{tab:sample} and figure \ref{fig:boxplot} to make your report to be easier to follow for readers! 
 % You can use following websites to make your latex table:
@@ -648,7 +655,7 @@ We can see in Table \ref{tab:sentimentassessment} and \ref{tab:topicassessment} 
 
 \begin{table}[!ht]
 \centering
-\caption{\scriptsize Sentiment classification final assessment where \textit{best\_score} represents the testing accuracies. \label{tab:sentimentassessment}}
+\caption{\scriptsize Sentiment classification final assessment where \textit{best\_score} represents the testing accuracy. \label{tab:sentimentassessment}}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{0.8\linewidth}{!}{
 \begin{tabular}{|l|l|l|}
@@ -670,7 +677,7 @@ DecisionTreeClassifier  & 0.663     \\ \hline
 
 \begin{table}[!ht]
 \centering
-\caption{\scriptsize Topic classification final assessment where \textit{best\_score} represents the testing accuracies.\label{tab:topicassessment}}
+\caption{\scriptsize Topic classification final assessment where \textit{best\_score} represents the testing accuracy. \label{tab:topicassessment}}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{0.8\linewidth}{!}{
 \begin{tabular}{|l|l|l|}
@@ -743,18 +750,18 @@ You will find the task descriptions executed by each group member in Table \ref{
 
 \begin{table}[!ht]
 \centering
-\caption{\scriptsize Best hyperparameters found during grid search for the sentiment classification task.}
-\label{tab:sentiment_gs}
+\caption{Best hyperparameters found during grid search for the sentiment classification task.}
+\label{tab:sentiment_gs_hp}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{\linewidth}{!}{%
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|}
 \hline
-classifier & best\_params & best\_score & std\_test\_score \\ \hline
-SVC	& \{'C': 10, 'class\_weight': 'balanced', 'kernel': 'rbf', 'probability': True\}	& 0.824	& 0.022 \\ \hline
-MultinomialNB & \{'alpha': 10\}	& 0.807	& 0.031 \\ \hline
-RandomForestClassifier & \{'class\_weight': None, 'criterion': 'entropy', 'n\_estimators': 70\}	& 0.802	& 0.014 \\ \hline
-KNeighborsClassifier & \{'n\_neighbors': 85, 'p': 2\}	& 0.742	& 0.017 \\ \hline
-DecisionTreeClassifier & \{'class\_weight': 'balanced', 'criterion': 'entropy', 'splitter': 'best'\}	& 0.692	& 0.024 \\ \hline
+classifier & best\_parameters\\ \hline
+SVC & \{'C': 10, 'class\_weight': 'balanced', 'kernel': 'rbf', 'probability': True\} \\ \hline
+MultinomialNB & \{'alpha': 10\} \\ \hline
+RandomForestClassifier & \{'class\_weight': None, 'criterion': 'entropy', 'n\_estimators': 70\} \\ \hline
+KNeighborsClassifier & \{'n\_neighbors': 85, 'p': 2\}\\ \hline
+DecisionTreeClassifier & \{'class\_weight': 'balanced', 'criterion': 'entropy', 'splitter': 'best'\}\\ \hline
 \end{tabular}
 %
 }
@@ -762,18 +769,57 @@ DecisionTreeClassifier & \{'class\_weight': 'balanced', 'criterion': 'entropy', 
 
 \begin{table}[!ht]
 \centering
-\caption{\scriptsize Best hyperparameters found during grid search for the topic classification task.}
-\label{tab:topic_gs}
+\caption{Results found during grid search for the sentiment classification task.}
+\label{tab:sentiment_gs}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{0.6\linewidth}{!}{%
+\begin{tabular}{|c|c|c|}
+\hline
+classifier & best\_score & std\_test\_score \\ \hline
+SVC	& 0.824	& 0.022 \\ \hline
+MultinomialNB & 0.807	& 0.031 \\ \hline
+RandomForestClassifier & 0.802	& 0.014 \\ \hline
+KNeighborsClassifier & 0.742	& 0.017 \\ \hline
+DecisionTreeClassifier 	& 0.692	& 0.024 \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\caption{Best hyperparameters found during grid search for the topic classification task.}
+\label{tab:topic_gs_hp}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{\linewidth}{!}{%
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|}
 \hline
-classifier & best\_params & best\_score & std\_test\_score \\ \hline
-SVC	& \{'C': 10, 'class\_weight': 'balanced', 'kernel': 'rbf', 'probability': True\}	& 0.919	& 0.003 \\ \hline
-MultinomialNB & \{'alpha': 1\}	& 0.917	& 0.011 \\ \hline
-KNeighborsClassifier & \{'n\_neighbors': 95, 'p': 2\}	& 0.890	& 0.008 \\ \hline
-RandomForestClassifier & \{'class\_weight': 'balanced\_subsample', 'criterion': 'gini', 'n\_estimators': 90\}	& 0.881	& 0.008 \\ \hline
-DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'gini', 'splitter': 'random'\}	& 0.800	& 0.023 \\ \hline
+classifier & best\_parameters\\ \hline
+SVC& \{'C': 10, 'class\_weight': 'balanced', 'kernel': 'rbf', 'probability': True\} \\ \hline
+MultinomialNB& \{'alpha': 1\} \\ \hline
+RandomForestClassifier& \{'class\_weight': 'balanced\_subsample', 'criterion': 'gini', 'n\_estimators': 90\} \\ \hline
+KNeighborsClassifier& \{'n\_neighbors': 95, 'p': 2\} \\ \hline
+DecisionTreeClassifier& \{'class\_weight': None, 'criterion': 'gini', 'splitter': 'random'\} \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
+
+\begin{table}[!ht]
+\centering
+\caption{Results found during grid search for the topic classification task.}
+\label{tab:topic_gs}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{0.6\linewidth}{!}{%
+\begin{tabular}{|c|c|c|}
+\hline
+classifier & best\_score & std\_test\_score \\ \hline
+SVC	& 0.919	& 0.003 \\ \hline
+MultinomialNB & 0.917	& 0.011 \\ \hline
+KNeighborsClassifier & 0.890	& 0.008 \\ \hline
+RandomForestClassifier & 0.881	& 0.008 \\ \hline
+DecisionTreeClassifier & 0.800	& 0.023 \\ \hline
 \end{tabular}
 %
 }
@@ -783,37 +829,78 @@ DecisionTreeClassifier & \{'class\_weight': None, 'criterion': 'gini', 'splitter
 
 \begin{table}[!ht]
 \centering
-\caption{\scriptsize Best hyperparameters found during grid search for the sentiment classification task.}
-\label{tab:sentiment_em_gs}
+\caption{Best hyperparameters found during grid search for the sentiment classification task.}
+\label{tab:sentiment_em_gs_hp}
 \small\addtolength{\tabcolsep}{-4pt}
 \resizebox{\linewidth}{!}{
 \begin{tabular}{|c|c|c|c|}
 \hline
-classifier & best\_params & best\_score & std\_test\_score \\ \hline
-BaggingClassifier & \{'base\_estimator': SVC(C=10, class\_weight='balanced', probability=True), 'max\_samples': 500, 'n\_estimators': 80\}	& 0.807	& 0.031 \\ \hline
-ExtraTreesClassifier & \{'class\_weight': None, 'criterion': 'entropy', 'max\_samples': 400, 'n\_estimators': 90\}	& 0.820	& 0.022 \\ \hline
-GradientBoostingClassifier & \{'learning\_rate': 0.3, 'n\_estimators': 120\}	& 0.784 & 0.013 \\ \hline
-StackingClassifier & \{'final\_estimator': LogisticRegression(solver='liblinear')\}	& 0.822	& 0.019 \\ \hline
-XGBClassifier & \{'learning\_rate': 0.3, 'n\_estimators': 130\} & 0.794 & 0.023 \\ \hline
+classifier & best\_parameters \\ \hline
+BaggingClassifier & \{'base\_estimator': SVC(C=10, class\_weight='balanced', probability=True), 'max\_samples': 500, 'n\_estimators': 80\}\\ \hline
+ExtraTreesClassifier & \{'class\_weight': None, 'criterion': 'entropy', 'max\_samples': 400, 'n\_estimators': 90\} \\ \hline
+GradientBoostingClassifier & \{'learning\_rate': 0.3, 'n\_estimators': 120\} \\ \hline
+StackingClassifier 	& \{'final\_estimator': LogisticRegression(solver='liblinear')\} \\ \hline
+XGBClassifier & \{'learning\_rate': 0.3, 'n\_estimators': 130\} \\ \hline
 \end{tabular}
 %
 }
 \end{table}
 
+
 \begin{table}[!ht]
 \centering
-\caption{\scriptsize Best hyperparameters found during grid search for the topic classification task.}
-\label{tab:topic_em_gs}
+\caption{Results found during grid search for the sentiment classification task.}
+\label{tab:sentiment_em_gs}
 \small\addtolength{\tabcolsep}{-4pt}
-\resizebox{\linewidth}{!}{%
+\resizebox{0.6\linewidth}{!}{
 \begin{tabular}{|c|c|c|c|}
 \hline
-classifier & best\_params & best\_score & std\_test\_score \\ \hline
-BaggingClassifier & \{base\_estimator=SVC(C=10, class\_weight='balanced', probability=True), max\_samples=500, n\_estimators=80\}	& 0.907	& 0.009 \\ \hline
-ExtraTreesClassifier & \{'class\_weight': 'balanced', 'criterion': 'gini', 'max\_samples': 200, 'n\_estimators': 90\}	& 0.898	& 0.014 \\ \hline
-GradientBoostingClassifier & \{'learning\_rate': 0.2, 'n\_estimators': 120\}	& 0.861	& 0.015 \\ \hline
-StackingClassifier & \{'final\_estimator': LogisticRegression(solver='liblinear')\} & 0.925 & 0.006 \\ \hline
-XGBClassifier & \{'learning\_rate': 0.3, 'n\_estimators': 130\}	& 0.886	& 0.016 \\ \hline
+classifier & best\_score & std\_test\_score \\ \hline
+BaggingClassifier & 0.807	& 0.031 \\ \hline
+ExtraTreesClassifier & 0.820	& 0.022 \\ \hline
+GradientBoostingClassifier & 0.784 & 0.013 \\ \hline
+StackingClassifier 	& 0.822	& 0.019 \\ \hline
+XGBClassifier & 0.794 & 0.023 \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
+
+\begin{table}[!ht]
+\centering
+\caption{Best hyperparameters found during grid search for the topic classification task.}
+\label{tab:topic_em_gs_hp}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{|c|c|c|c|}
+\hline
+classifier & best\_parameters \\ \hline
+BaggingClassifier & \{base\_estimator=SVC(C=10, class\_weight='balanced', probability=True), max\_samples=500, n\_estimators=80\} \\ \hline
+ExtraTreesClassifier & \{'class\_weight': 'balanced', 'criterion': 'gini', 'max\_samples': 200, 'n\_estimators': 90\} \\ \hline
+GradientBoostingClassifier & \{'learning\_rate': 0.2, 'n\_estimators': 120\} \\ \hline
+StackingClassifier 	& \{'final\_estimator': LogisticRegression(solver='liblinear')\} \\ \hline
+XGBClassifier & \{'learning\_rate': 0.3, 'n\_estimators': 130\} \\ \hline
+\end{tabular}
+%
+}
+\end{table}
+
+
+\begin{table}[!ht]
+\centering
+\caption{Results found during grid search for the topic classification task.}
+\label{tab:topic_em_gs}
+\small\addtolength{\tabcolsep}{-4pt}
+\resizebox{0.6\linewidth}{!}{%
+\begin{tabular}{|c|c|c|c|}
+\hline
+classifier & best\_score & std\_test\_score \\ \hline
+BaggingClassifier & 0.907	& 0.009 \\ \hline
+ExtraTreesClassifier & 0.898	& 0.014 \\ \hline
+GradientBoostingClassifier & 0.861	& 0.015 \\ \hline
+StackingClassifier & 0.925 & 0.006 \\ \hline
+XGBClassifier & 0.886	& 0.016 \\ \hline
 \end{tabular}
 %
 }
