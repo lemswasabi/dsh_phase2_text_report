@@ -394,7 +394,7 @@ In figure \ref{fig:removfeatures} we can see the number of columns we drop in th
 We perform a Chi-Square test to the samples to retrieve only the k best features. Here k is 4000.\newline
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=3.5cm, height=5.5cm]{4.png}
+    \includegraphics[width=4cm, height=6cm]{4.png}
     \caption{\scriptsize Changes in the data after using Univariate feature selection that retrieves the 4000 best features}
     \label{fig:univfeature}
 \end{figure}
@@ -609,9 +609,19 @@ During this analysis, we observed that the overall performance of the models imp
 
 \subsection{Ensemble methods}
 
-Ensemble methods are techniques that create multiple models and then combine them to produce improved results. We can combine any machine learning algorithm such as logistic regression, decision tree, naive bayes. These models, when used as inputs of ensemble methods, are called ”base models”.
+We used ensemble methods for classification. Ensemble methods are techniques that create multiple models and then combine them to produce improved results. We can combine any machine learning algorithm such as logistic regression, decision tree, naive bayes. These models, when used as inputs of ensemble methods, are called "weak learners" or ”base models”. Some widely known methods of ensemble: bagging, boosting and stacking.
 
-We used ensemble methods for classification and including some widely known methods of ensemble: bagging, boosting and stacking.
+\subsubsection{Bagging}
+
+Bagging or Bootstrap Aggregation is an ensemble learning technique which perform a set of homogeneous weak learners. Homogeneous means that we have \emph{n} numbers of the same learner and not different kinds of learners. The bagging process is, first, to get \emph{n} subsets from the training, learns them independently from each other in parallel and combines them following some kind of deterministic averaging process.
+
+\subsubsection{Boosting}
+
+Boosting refers to the process of sequentially training some homogeneous base models to build a model. Here, a base model depends on the previous ones. Predictions for boosting algorithms usually assign weights to determine the importance of each learner’s input. The boosting process is, first, to train one base model, evaluate where the model or learner misclassified, then train another learner focusing on the areas where the previous learner misclassified and repeat this process until some stopping criteria is met, e.g., performance plateau.
+
+\subsubsection{Stacking}
+
+Stacking considers heterogeneous weak learners. Heterogeneous means that we have different sort of learners (e.g. Decision tree, KNeighbors, Naive Bayes, etc). Stacking learns them in parallel and combines them by training a another leanrer called "meta-model" to output a prediction based on the different weak learners predictions.
 
 \subsection{Grid Search}
 
